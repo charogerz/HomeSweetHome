@@ -23,4 +23,12 @@ function draw() {
     // right shape
     fill("blue");
     ellipse(width-125, height/2, 100);
+
+    if(mouseIsPressed) {
+        push();
+        fill("#f2f2f2");
+        noStroke();
+        ellipse(mouseX, mouseY, 50);
+        pop();
+    }
 }
