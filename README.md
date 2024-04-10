@@ -4,7 +4,7 @@ Welcome to Game B from Crikey!
 
 Game B is an online multiplayer game made using the [p5party↗](https://p5party.org/) library.
 
-### [Play here↗](https://rogec540.github.io/GameA/src/index.html)!
+### [Play here↗](https://rogec540.github.io/GameA/src/index.html)
 
 ## 🌟 Features
 
