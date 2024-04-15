@@ -11,7 +11,7 @@ function preload() {
 	guests = partyLoadGuestShareds();
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
-		gameState: "playing"
+		gameState: "intro"
 	});
 	roomImg = loadImage("./assets/room-layout.png");
 	tableHighlightImg = loadImage("./assets/table-highlight.png");
@@ -42,14 +42,39 @@ function draw() {
 		shared.gameState = "playing";
 	}
 
+	// player cursors
 	for (const guest of guests) {
-		fill("yellow");
+		if (partyIsHost()) {
+			fill("red");
+		} else {
+			fill("yellow");
+		}
 		ellipse(guest.x, guest.y, 30, 30);
 	}
 }
 
 function drawIntro() {
+	background("#f2f2f2");
+	textFont("Verdana");
+	textAlign(CENTER);
+	fill("#000066");
 
+	// title
+	push();
+	textStyle(BOLD);
+	textSize(50);
+	text("Welcome to Tidy Mates!", width/2, height/3);
+	pop();
+
+	// credits and brief intro
+	push();
+	textSize(25);
+	rectMode(CENTER);
+	text("A game by Crikey!", width/2, 325);
+	text("Many hands make light work!", width/2, 450);
+	text("Work with your \"roommate\" to check off the to-do list items and tidy the room.", width/2, 460, 530);
+	text("Press any button to continue >>>", width/2, 650);
+	pop();
 }
 
 function drawMain() {
@@ -60,14 +85,18 @@ function drawMain() {
 		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700) {
 			image(tableHighlightImg, 81, 435, 307, 307);
 			if (mouseIsPressed) {
-				shared.gameState === "table-game";
+				shared.gameState = "table-game";
 			}
 		}
 	}
 }
 
 function drawTableGame() {
-	background(tableFullImg);
+	background("#f2f2f2");
+	tableFullImg.resize(800, 600);
+	image(tableFullImg, 0, 100);
+
+
 }
 
 

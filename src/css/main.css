@@ -6,6 +6,7 @@ body {
 }
 
 body {
+	font-family: "Josefin Slab", serif;
 	display: flex;
 	justify-content: center;
 	align-items: center;
