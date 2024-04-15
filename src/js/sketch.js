@@ -4,7 +4,7 @@ let shared;
 let my, guests;
 let roomImg;
 let bg;
-let tableHighlight, tableHighlightImg;
+let tableHighlightImg;
 
 function preload() {
 	partyConnect("wss://demoserver.p5party.org", "team1_gameB"); 
@@ -15,13 +15,11 @@ function preload() {
 	});
 	roomImg = loadImage("./assets/room-layout.png");
 	tableHighlightImg = loadImage("./assets/table-highlight.png");
+	tableFullImg = loadImage("./assets/dining-table.png");
 }
 
 function setup() {
 	createCanvas(800, 800);
-
-	bg = createGraphics(800, 800);
-	bg.image(roomImg, 0, 0, 800, 800);
 }
 
 function mouseMoved(e) {
@@ -36,6 +34,8 @@ function draw() {
 		drawIntro();
 	} else if (shared.gameState === "playing") {
 		drawMain();
+	} else if (shared.gameState === "table-game") {
+		drawTableGame();
 	}
 
 	if (shared.gameState === "intro" && keyIsPressed === true) {
@@ -53,14 +53,21 @@ function drawIntro() {
 }
 
 function drawMain() {
-	image(bg, 0, 0, 800, 800);
+	background(roomImg);
 
 	// table hover
 	for (const guest of guests) {
 		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700) {
 			image(tableHighlightImg, 81, 435, 307, 307);
+			if (mouseIsPressed) {
+				shared.gameState === "table-game";
+			}
 		}
 	}
+}
+
+function drawTableGame() {
+	background(tableFullImg);
 }
 
 
