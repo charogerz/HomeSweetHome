@@ -63,7 +63,7 @@ function drawIntro() {
 	push();
 	textStyle(BOLD);
 	textSize(50);
-	text("Welcome to Tidy Mates!", width/2, height/3);
+	text("Welcome to Title Here!", width/2, height/3);
 	pop();
 
 	// credits and brief intro
