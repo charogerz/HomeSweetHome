@@ -1,43 +1,75 @@
-// GameB from Team One - Charlotte, Chloe, and Emma
+// GameB from Team One - Charlotte, Chloe, Sophie, and Emma
+
+let shared;
+let roomImg;
+let bg;
+let tableHighlight, tableHighlightImg;
 
 function preload() {
 	partyConnect("wss://demoserver.p5party.org", "team1_gameB"); 
+	shared = partyLoadShared("globals", {
+		gameState: "playing"
+	});
+	roomImg = loadImage("./assets/room-layout.png");
+	tableHighlightImg = loadImage("./assets/table-highlight.png");
 }
 
 function setup() {
 	createCanvas(800, 800);
-    drawShapes();
+
+	bg = createGraphics(800, 800);
+	bg.image(roomImg, 0, 0, 800, 800);
 }
 
 function draw() {
-	if (mouseIsPressed) {
-		push();
-		fill("#f2f2f2");
-		noStroke();
-		ellipse(mouseX, mouseY, 50);
-		pop();
+	background("#f2f2f2");
+
+	if (shared.gameState === "intro") {
+		drawIntro();
+	} else if (shared.gameState === "playing") {
+		drawMain();
 	}
 
-    // screen divider
-	line(width / 2, 0, width / 2, height);
+	if (shared.gameState === "intro" && keyIsPressed === true) {
+		shared.gameState = "playing";
+	}
 }
 
-function drawShapes() {
-    background("#f2f2f2");
+function drawIntro() {
 
-	// left shape
-	fill("red");
-	ellipse(width / 4, height / 2, 100);
-
-	// right shape
-	fill("blue");
-	ellipse(width - 200, height / 2, 100);
 }
 
-function mouseDragged() {
-    push();
-    noStroke();
-    fill("#f2f2f2");
-    ellipse(mouseX, mouseY, 50);
-    pop();
+function drawMain() {
+	image(bg, 0, 0, 800, 800);
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////// IGNORE BELOW, KEEPING CODE NOTES FOR LATER
+
+// if (mouseIsPressed) {
+	// 	push();
+	// 	bg.fill("#f2f2f2");
+	// 	bg.noStroke();
+	// 	bg.ellipse(mouseX, mouseY, 50);
+	// 	pop();
+	// }
+
+// function mouseDragged() {
+// 	push();
+// 	noStroke();
+// 	fill("#f2f2f2");
+// 	ellipse(mouseX, mouseY, 50);
+// 	pop();
+// }
