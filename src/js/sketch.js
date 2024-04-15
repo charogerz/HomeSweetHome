@@ -56,9 +56,10 @@ function drawMain() {
 	image(bg, 0, 0, 800, 800);
 
 	// table hover
-	
-	if (mouseX > 80 && mouseX < 400 && mouseY > 435 && mouseY < 700) {
-		image(tableHighlightImg, 81, 435, 307, 307);
+	for (const guest of guests) {
+		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700) {
+			image(tableHighlightImg, 81, 435, 307, 307);
+		}
 	}
 }
 
