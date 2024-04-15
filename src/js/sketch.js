@@ -11,7 +11,7 @@ function preload() {
 	guests = partyLoadGuestShareds();
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
-		gameState: "intro"
+		gameState: "table-game"
 	});
 	roomImg = loadImage("./assets/room-layout.png");
 	tableHighlightImg = loadImage("./assets/table-highlight.png");
@@ -57,11 +57,11 @@ function drawIntro() {
 	background("#f2f2f2");
 	textFont("Verdana");
 	textAlign(CENTER);
+	textStyle(BOLD);
 	fill("#000066");
 
 	// title
 	push();
-	textStyle(BOLD);
 	textSize(50);
 	text("Welcome to Title Here!", width/2, height/3);
 	pop();
@@ -93,10 +93,31 @@ function drawMain() {
 
 function drawTableGame() {
 	background("#f2f2f2");
-	tableFullImg.resize(800, 600);
-	image(tableFullImg, 0, 100);
+	tableFullImg.resize(1000, 800);
+	image(tableFullImg, -100, 90);
 
+	push();
+	stroke("orange");
+	strokeWeight(20);
+	noFill();
+	rect(385, 210, 105, 132, 2);
+	pop();
 
+	push();
+	stroke("red");
+	strokeWeight(20);
+	noFill();
+	rect(228, 160, 162, 135, 2);
+	pop();
+
+	push();
+	angleMode(DEGREES);
+	stroke("green");
+	strokeWeight(20);
+	noFill();
+	rotate(45);
+	rect(800, -100, 105, 132, 2);
+	pop();
 }
 
 
