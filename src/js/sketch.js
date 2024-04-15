@@ -42,6 +42,10 @@ function drawIntro() {
 function drawMain() {
 	image(bg, 0, 0, 800, 800);
 
+	// table hover
+	if (mouseX > 80 && mouseX < 400 && mouseY > 435 && mouseY < 780) {
+		image(tableHighlightImg, 81, 435, 307, 307);
+	}
 }
 
 
