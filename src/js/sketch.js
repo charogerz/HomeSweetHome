@@ -121,14 +121,13 @@ function drawMain() {
 	// hovers
 	for (const guest of guests) {
 		// table
-		// if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700) {
-		// 	image(tableHighlightImg, 81, 435, 307, 307);
-		// 	if (mouseIsPressed) {
-		// 		shared.gameState = "table-game";
-		// 	}
-		// }
+		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700) {
+			image(tableHighlightImg, 81, 435, 307, 307);
+			if (mouseIsPressed) {
+				shared.gameState = "table-game";
+			}
 		// window
-		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200) {
+		} else if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200) {
 			image(windowHighlightImg, 172, 101, 131, 131);
 			if (mouseIsPressed) {
 				shared.gameState = "window-game";
