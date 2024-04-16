@@ -1,17 +1,40 @@
 // GameB from Team One - Charlotte, Chloe, Sophie, and Emma
 
+class Rect {
+	constructor(l = 0, t = 0, w = 0, h = 0) {
+		this.l = l;
+		this.t = t;
+		this.w = w;
+		this.h = h;
+	}
+}
+
+class Point {
+	constructor(x = 0, y = 0) {
+		this.x = x;
+		this.y = y;
+	}
+}
+
+function pointInRect(p, r) {
+	return p.x > r.l && p.x < r.l + r.w && p.y > r.t && p.y < r.t + r.h;
+}
+
+const my_id = Math.random();
+
 let shared;
 let my, guests;
 let roomImg;
 let bg;
 let tableHighlightImg;
+let tablePaper1, tablePaper2, tablePaper3, tablePaper4;
 
 function preload() {
-	partyConnect("wss://demoserver.p5party.org", "team1_gameB"); 
+	partyConnect("wss://demoserver.p5party.org", "team1_gameB");
 	guests = partyLoadGuestShareds();
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
-		gameState: "table-game"
+		gameState: "intro"
 	});
 	roomImg = loadImage("./assets/room-layout.png");
 	tableHighlightImg = loadImage("./assets/table-highlight.png");
@@ -20,11 +43,26 @@ function preload() {
 
 function setup() {
 	createCanvas(800, 800);
+
+	if (partyIsHost()) {
+		shared.sprites = [];
+	}
+
+	partySubscribe("updateSprite", onUpdateSprite);
 }
 
 function mouseMoved(e) {
 	my.x = mouseX;
 	my.y = mouseY;
+}
+
+function onUpdateSprite({ id, updates }) {
+	if (!partyIsHost()) return;
+	const s = shared.sprites.find((s) => s.id === id);
+	if (!s) return;
+	for (const [k, v] of Object.entries(updates)) {
+		s[k] = v;
+	}
 }
 
 function draw() {
@@ -44,11 +82,7 @@ function draw() {
 
 	// player cursors
 	for (const guest of guests) {
-		if (partyIsHost()) {
-			fill("red");
-		} else {
-			fill("yellow");
-		}
+		fill("yellow");
 		ellipse(guest.x, guest.y, 30, 30);
 	}
 }
@@ -63,17 +97,17 @@ function drawIntro() {
 	// title
 	push();
 	textSize(50);
-	text("Welcome to Title Here!", width/2, height/3);
+	text("Welcome to Title Here!", width / 2, height / 3);
 	pop();
 
 	// credits and brief intro
 	push();
 	textSize(25);
 	rectMode(CENTER);
-	text("A game by Crikey!", width/2, 325);
-	text("Many hands make light work!", width/2, 450);
-	text("Work with your \"roommate\" to check off the to-do list items and tidy the room.", width/2, 460, 530);
-	text("Press any button to continue >>>", width/2, 650);
+	text("A game by Crikey!", width / 2, 325);
+	text("Many hands make light work!", width / 2, 450);
+	text("Work with your \"roommate\" to check off the to-do list items and tidy the room.", width / 2, 460, 530);
+	text("Press any button to continue >>>", width / 2, 650);
 	pop();
 }
 
@@ -103,12 +137,12 @@ function drawTableGame() {
 	rect(385, 210, 105, 132, 2);
 	pop();
 
-	push();
-	stroke("red");
-	strokeWeight(20);
-	noFill();
-	rect(228, 160, 162, 135, 2);
-	pop();
+	// push();
+	// stroke("red");
+	// strokeWeight(20);
+	// noFill();
+	// rect(228, 160, 162, 135, 2);
+	// pop();
 
 	push();
 	angleMode(DEGREES);
@@ -116,13 +150,99 @@ function drawTableGame() {
 	strokeWeight(20);
 	noFill();
 	rotate(45);
-	rect(800, -100, 105, 132, 2);
+	rect(550, -300, 105, 132, 2);
+	pop();
+
+	push();
+	angleMode(DEGREES);
+	stroke("purple");
+	strokeWeight(20);
+	noFill();
+	rotate(45);
+	rect(540, -80, 105, 132, 2);
+	pop();
+
+	if (partyIsHost()) {
+		shared.sprites.push(initSprite("a", new Rect(228, 160, 162, 135), "red"));
+
+		shared.sprites.forEach(stepSprite);
+		shared.sprites.forEach(drawSprite);
+	}
+}
+
+function mousePressed() {
+	for (const s of shared.sprites.slice().reverse()) {
+		if (mousePressedSprite(s)) break;
+	}
+}
+
+function mouseReleased() {
+	for (const s of shared.sprites.slice().reverse()) {
+		if (mouseReleasedSprites(s)) break;
+	}
+}
+
+function initSprite(id, rect = new Rect(), color = "red") {
+	const s = {};
+	s.id = id;
+	s.rect = rect;
+	s.color = color;
+	return s;
+}
+
+function drawSprite(s) {
+	push();
+	fill(s.color);
+	noStroke();
+	rect(s.rect.l, s.rect.t, s.rect.w, s.rect.h);
 	pop();
 }
 
+function stepSprite(s) {
+	if (s.inDrag && s.owner === my_id) {
+		// create new rect
+		const rect = new Rect(
+			mouseX + s.dragOffset.x,
+			mouseY + s.dragOffset.y,
+			s.rect.w,
+			s.rect.h,
+		);
 
+		// update
+		partyEmit("updateSprite", {
+			id: s.id,
+			updates: { rect },
+		});
+	}
+}
 
+function mousePressedSprite(s) {
+	if (!s.inDrag && pointInRect(new Point(mouseX, mouseY), s.rect)) {
+		partyEmit("updateSprite", {
+			id: s.id,
+			updates: {
+				inDrag: true,
+				owner: my_id,
+				dragOffset: new Point(s.rect.l - mouseX, s.rect.t - mouseY),
+			},
+		});
+		return true;
+	}
+	return false;
+}
 
+function mouseReleasedSprite(s) {
+	if (s.owner === my_id) {
+		partyEmit("updateSprite", {
+			id: s.id,
+			updates: {
+				inDrag: false,
+				owner: null,
+			},
+		});
+	}
+	return false;
+}
 
 
 
@@ -135,12 +255,12 @@ function drawTableGame() {
 ////////// IGNORE BELOW, KEEPING CODE NOTES FOR LATER
 
 // if (mouseIsPressed) {
-	// 	push();
-	// 	bg.fill("#f2f2f2");
-	// 	bg.noStroke();
-	// 	bg.ellipse(mouseX, mouseY, 50);
-	// 	pop();
-	// }
+// 	push();
+// 	bg.fill("#f2f2f2");
+// 	bg.noStroke();
+// 	bg.ellipse(mouseX, mouseY, 50);
+// 	pop();
+// }
 
 // function mouseDragged() {
 // 	push();
