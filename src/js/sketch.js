@@ -128,7 +128,7 @@ function drawMain() {
 			}
 		}
 		// window
-		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200) {
+		 else if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200) {
 			image(windowHighlightImg, 172, 101, 131, 131);
 			if (mouseIsPressed) {
 				shared.gameState = "window-game";
