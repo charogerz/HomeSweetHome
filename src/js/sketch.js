@@ -26,8 +26,8 @@ let shared;
 let my, guests;
 let roomImg;
 let bg;
-let tableHighlightImg;
-let tablePaper1, tablePaper2, tablePaper3, tablePaper4;
+let tableHighlightImg, tableFullImg;
+let windowHighlightImg, windowFullImg;
 
 function preload() {
 	partyConnect("wss://demoserver.p5party.org", "team1_gameB");
@@ -39,6 +39,8 @@ function preload() {
 	roomImg = loadImage("./assets/room-layout.png");
 	tableHighlightImg = loadImage("./assets/table-highlight.png");
 	tableFullImg = loadImage("./assets/dining-table.png");
+	windowHighlightImg = loadImage("./assets/window-highlight.png");
+	windowFullImg = loadImage("./assets/window.png");
 }
 
 function setup() {
@@ -74,6 +76,8 @@ function draw() {
 		drawMain();
 	} else if (shared.gameState === "table-game") {
 		drawTableGame();
+	} else if (shared.gameState === "window-game") {
+		drawWindowGame();
 	}
 
 	if (shared.gameState === "intro" && keyIsPressed === true) {
@@ -114,12 +118,20 @@ function drawIntro() {
 function drawMain() {
 	background(roomImg);
 
-	// table hover
+	// hovers
 	for (const guest of guests) {
+		// table
 		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700) {
 			image(tableHighlightImg, 81, 435, 307, 307);
 			if (mouseIsPressed) {
 				shared.gameState = "table-game";
+			}
+		}
+		// window
+		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200) {
+			image(windowHighlightImg, 172, 101, 131, 131);
+			if (mouseIsPressed) {
+				shared.gameState = "window-game";
 			}
 		}
 	}
@@ -242,6 +254,12 @@ function mouseReleasedSprite(s) {
 		});
 	}
 	return false;
+}
+
+function drawWindowGame() {
+	background("#f2f2f2");
+	windowFullImg.resize(700, 500);
+	image(windowFullImg, 50, 150);
 }
 
 
