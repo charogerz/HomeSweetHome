@@ -26,6 +26,7 @@ let shared;
 let my, guests;
 let roomImg;
 let bg;
+let checklistImg;
 let tableHighlightImg, tableFullImg;
 let windowHighlightImg, windowFullImg;
 
@@ -37,6 +38,7 @@ function preload() {
 		gameState: "intro",
 	});
 	roomImg = loadImage("./assets/images/room-layout.png");
+	checklistImg = loadImage("./assets/images/todo-list.png");
 	tableHighlightImg = loadImage("./assets/images/table-highlight.png");
 	tableFullImg = loadImage("./assets/images/dining-table.png");
 	windowHighlightImg = loadImage("./assets/images/window-highlight.png");
@@ -124,6 +126,19 @@ function drawIntro() {
 function drawMain() {
 	background(roomImg);
 
+	// checklist button
+	push();
+	noFill();
+	stroke("#000066");
+	strokeWeight(5);
+	rect(305, 725, 200, 50, 20);
+	pop();
+	push();
+	textSize(20);
+	fill("#000066");
+	text("click for checklist", 405, 755);
+	pop();
+
 	// hovers
 	for (const guest of guests) {
 		// table
@@ -142,6 +157,16 @@ function drawMain() {
 			}
 			return;
 		}
+		// checklist
+		if (guest.x > 305 && guest.x < 505 && guest.y > 725 && guest.y < 775 && mouseIsPressed) {
+			image(checklistImg, 200, 80, 400, 650);
+			push();
+			fill("#000066");
+			textSize(25);
+			text("- wipe the window", 400, 290);
+			text("- clean the table", 395, 340);
+			pop();
+		}
 	}
 }
 
@@ -150,6 +175,13 @@ function drawTableGame() {
 	tableFullImg.resize(1000, 800);
 	image(tableFullImg, -100, 90);
 
+	// tabletop covering orig image
+	push();
+	fill("#f2f2f2");
+	noStroke();
+	rect(120, 145, 567, 480);
+	pop();
+	
 	push();
 	stroke("orange");
 	strokeWeight(20);
