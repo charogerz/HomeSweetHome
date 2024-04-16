@@ -25,10 +25,13 @@ const my_id = Math.random();
 let shared;
 let my, guests;
 let roomImg;
-let bg;
+let g;
 let checklistImg;
+let checkmark;
 let tableHighlightImg, tableFullImg;
+let tableTask;
 let windowHighlightImg, windowFullImg;
+let windowTask;
 
 function preload() {
 	partyConnect("wss://demoserver.p5party.org", "team1_gameB");
@@ -36,6 +39,8 @@ function preload() {
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
 		gameState: "intro",
+		windowTask: "false",
+		tableTask: "false"
 	});
 	roomImg = loadImage("./assets/images/room-layout.png");
 	checklistImg = loadImage("./assets/images/todo-list.png");
@@ -43,10 +48,20 @@ function preload() {
 	tableFullImg = loadImage("./assets/images/dining-table.png");
 	windowHighlightImg = loadImage("./assets/images/window-highlight.png");
 	windowFullImg = loadImage("./assets/images/window.png");
+	checkmark = loadImage("./assets/images/checkmark.png");
 }
 
 function setup() {
 	createCanvas(800, 800);
+
+	// graphics for window mess
+	g = createGraphics(800, 800);
+	g.fill("#bde7fc");
+	g.noStroke();
+	g.ellipse(300, 350, 400, 300);
+	g.ellipse(500, 420, 400, 300);
+	g.ellipse(320, 470, 300, 200);
+
 
 	if (partyIsHost()) {
 		shared.sprites = [];
@@ -150,12 +165,16 @@ function drawMain() {
 			return;
 		}
 		// window
-		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200) {
+		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === "false") {
 			image(windowHighlightImg, 172, 101, 131, 131);
 			if (mouseIsPressed) {
 				shared.gameState = "window-game";
 			}
 			return;
+		}
+		if (shared.windowTask === "true") {
+			image(windowHighlightImg, 172, 101, 131, 131);
+			image(checkmark, 205, 112, 60, 70);
 		}
 		// checklist
 		if (guest.x > 305 && guest.x < 505 && guest.y > 725 && guest.y < 775 && mouseIsPressed) {
@@ -297,27 +316,56 @@ function mouseReleasedSprite(s) {
 
 function drawWindowGame() {
 	background("#f2f2f2");
+
+	// instructions
+	fill("#000066");
+	textSize(30);
+	text("Roommate 1: click to add suds", 350, 60);
+	text("Roommate 2: click to wipe away", 360, 90);
+
+	// window
 	windowFullImg.resize(700, 500);
 	image(windowFullImg, 50, 150);
+
+	// mess to clean
+	image(g, 0, 0);
+
+	// done button
+	push();
+	fill("#f2f2f2");
+	stroke("#000066");
+	strokeWeight(5);
+	rect(305, 725, 200, 50, 20);
+	pop();
+	push();
+	textSize(20);
+	fill("#000066");
+	text("finished task!", 405, 755);
+	pop();
+
+	for (const guest of guests) {
+		if (guest.x > 305 && guest.x < 505 && guest.y > 725 && guest.y < 775 && mouseIsPressed) {
+			shared.windowTask = "true";
+			shared.gameState = "playing";
+		}
+	}
+}
+
+function mouseClicked() {
+	// window cleaning functions
+	if (shared.gameState === "window-game") {
+		if (partyIsHost()) {
+			g.fill("#ff9eed");
+			g.ellipse(my.x, my.y, 60);
+		} else {
+			g.erase();
+			g.ellipse(my.x, my.y, 120);
+		}
+	}
 }
 
 ////////// IGNORE BELOW, KEEPING CODE NOTES FOR LATER
 
-// if (mouseIsPressed) {
-// 	push();
-// 	bg.fill("#FF0000");
-// 	bg.noStroke();
-// 	bg.ellipse(mouseX, mouseY, 50);
-// 	pop();
-// }
-
-// function mouseDragged() {
-// 	push();
-// 	noStroke();
-// 	fill("#FF0000");
-// 	ellipse(mouseX, mouseY, 50);
-// 	pop();
-// }
 
 // MULTICOLOR DRAG AND DRAW, MAYBE USEFUL?
 // function draw() {
