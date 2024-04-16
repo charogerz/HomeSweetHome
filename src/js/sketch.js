@@ -34,13 +34,13 @@ function preload() {
 	guests = partyLoadGuestShareds();
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
-		gameState: "intro"
+		gameState: "intro",
 	});
-	roomImg = loadImage("./assets/room-layout.png");
-	tableHighlightImg = loadImage("./assets/table-highlight.png");
-	tableFullImg = loadImage("./assets/dining-table.png");
-	windowHighlightImg = loadImage("./assets/window-highlight.png");
-	windowFullImg = loadImage("./assets/window.png");
+	roomImg = loadImage("./assets/images/room-layout.png");
+	tableHighlightImg = loadImage("./assets/images/table-highlight.png");
+	tableFullImg = loadImage("./assets/images/dining-table.png");
+	windowHighlightImg = loadImage("./assets/images/window-highlight.png");
+	windowFullImg = loadImage("./assets/images/window.png");
 }
 
 function setup() {
@@ -93,7 +93,8 @@ function draw() {
 
 function drawIntro() {
 	background("#f2f2f2");
-	textFont("Verdana");
+	// Comic Sans! Can change :]
+	textFont("Comic Sans MS");
 	textAlign(CENTER);
 	textStyle(BOLD);
 	fill("#000066");
@@ -101,16 +102,21 @@ function drawIntro() {
 	// title
 	push();
 	textSize(50);
-	text("Welcome to Title Here!", width / 2, height / 3);
+	text("Home Sweet Home!", width / 2, height / 3);
 	pop();
 
 	// credits and brief intro
 	push();
 	textSize(25);
 	rectMode(CENTER);
-	text("A game by Crikey!", width / 2, 325);
+	text("Welcome to another game by Crikey!", width / 2, 325);
 	text("Many hands make light work!", width / 2, 450);
-	text("Work with your \"roommate\" to check off the to-do list items and tidy the room.", width / 2, 460, 530);
+	text(
+		'Work with your "roommate" to check off the to-do list items and tidy the room.',
+		width / 2,
+		460,
+		530
+	);
 	text("Press any button to continue >>>", width / 2, 650);
 	pop();
 }
@@ -178,7 +184,6 @@ function drawTableGame() {
 
 	if (partyIsHost()) {
 		shared.sprites.push(initSprite("a", new Rect(228, 160, 162, 135), "red"));
-
 		shared.sprites.forEach(stepSprite);
 		shared.sprites.forEach(drawSprite);
 	}
@@ -219,7 +224,7 @@ function stepSprite(s) {
 			mouseX + s.dragOffset.x,
 			mouseY + s.dragOffset.y,
 			s.rect.w,
-			s.rect.h,
+			s.rect.h
 		);
 
 		// update
@@ -264,19 +269,11 @@ function drawWindowGame() {
 	image(windowFullImg, 50, 150);
 }
 
-
-
-
-
-
-
-
-
 ////////// IGNORE BELOW, KEEPING CODE NOTES FOR LATER
 
 // if (mouseIsPressed) {
 // 	push();
-// 	bg.fill("#f2f2f2");
+// 	bg.fill("#FF0000");
 // 	bg.noStroke();
 // 	bg.ellipse(mouseX, mouseY, 50);
 // 	pop();
@@ -285,7 +282,18 @@ function drawWindowGame() {
 // function mouseDragged() {
 // 	push();
 // 	noStroke();
-// 	fill("#f2f2f2");
+// 	fill("#FF0000");
 // 	ellipse(mouseX, mouseY, 50);
 // 	pop();
 // }
+
+// MULTICOLOR DRAG AND DRAW, MAYBE USEFUL?
+// function draw() {
+
+// 	if (mouseIsPressed === true) {
+// 	  ellipse(mouseX, mouseY, 15,20,30);
+// 	  // fill("#dfeed3")
+// 	  // rect(mouseX, mouseY, 15,20,30);
+// 	  fill(225, random(225), random(225));
+// 	}
+//   }

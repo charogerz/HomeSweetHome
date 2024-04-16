@@ -16,3 +16,11 @@ body {
 canvas {
 	display: block;
 }
+
+@font-face {
+	font-family: "Comic Sans MS", "Comic Sans", sans-serif;
+	src: url("src/assets/fonts/ComicSansMS.ttf") format("ttf");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
