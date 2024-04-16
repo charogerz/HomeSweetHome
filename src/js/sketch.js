@@ -159,6 +159,10 @@ function drawMain() {
 		// table
 		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700) {
 			image(tableHighlightImg, 81, 435, 307, 307);
+			if (shared.windowTask === "true") {
+				image(windowHighlightImg, 172, 101, 131, 131);
+				image(checkmark, 205, 112, 60, 70);
+			}
 			if (mouseIsPressed) {
 				shared.gameState = "table-game";
 			}
