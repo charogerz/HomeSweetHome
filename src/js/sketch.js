@@ -193,6 +193,9 @@ function drawMain() {
 			text("- wipe the window", 400, 360);
 			text("- clean the table", 395, 400);
 			pop();
+			if (shared.windowTask === "true") {
+				image(checkmark, 287, 330, 25, 30);
+			}
 		}
 	}
 }
