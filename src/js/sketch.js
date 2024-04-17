@@ -107,6 +107,7 @@ function draw() {
 	// player cursors
 	for (const guest of guests) {
 		fill("yellow");
+		noStroke();
 		ellipse(guest.x, guest.y, 30, 30);
 	}
 }
@@ -137,7 +138,7 @@ function drawIntro() {
 		460,
 		530
 	);
-	text("Press any button to continue >>>", width / 2, 650);
+	text("Press any key to continue >>>", width / 2, 650);
 	pop();
 }
 
@@ -200,48 +201,54 @@ function drawTableGame() {
 	background("#f2f2f2");
 	tableFullImg.resize(1000, 800);
 	image(tableFullImg, -100, 90);
-
-	// tabletop covering orig image
-	push();
-	fill("#f2f2f2");
 	noStroke();
-	rect(120, 145, 567, 480);
-	pop();
+
+	// instructions
+	fill("#000066");
+	textSize(30);
+	text("Roommate 1: sort the red items", 400, 50);
+	text("Roommate 2: sort the blue items", 405, 80);
+
+
+	// tabletop with designated goal areas
+	fill("#f2f2f2");
+	rect(120, 145, 569, 480, 20);
+	// red goal
+	fill(255, 0, 0, 127);
+	ellipse(640, 170, 80);
+	fill("#000066")
+	textSize(14);
+	text("red here", 640, 175);
+	// blue goal
+	fill(0, 0, 255, 127);
+	ellipse(155, 610, 80);
+	fill("black")
+	textSize(14);
+	text("blue here", 155, 615);
+
 
 	// push();
-	// stroke("red");
-	// strokeWeight(20);
-	// noFill();
-	// rect(228, 160, 162, 135, 2);
+	// fill("red");
+	// rect(200, 160, 162, 125);
 	// pop();
 
 	push();
-	stroke("orange");
-	strokeWeight(20);
-	noFill();
-	rect(385, 210, 105, 132, 2);
+	fill("blue");
+	rect(385, 260, 105, 132);
 	pop();
 
 	push();
-	angleMode(DEGREES);
-	stroke("green");
-	strokeWeight(20);
-	noFill();
-	rotate(45);
-	rect(550, -300, 105, 132, 2);
+	fill("blue");
+	rect(510, 320, 155, 132);
 	pop();
 
 	push();
-	angleMode(DEGREES);
-	stroke("purple");
-	strokeWeight(20);
-	noFill();
-	rotate(45);
-	rect(540, -80, 105, 132, 2);
+	fill("red");
+	rect(240, 450, 105, 132);
 	pop();
 
 	if (partyIsHost()) {
-		shared.sprites.push(initSprite("a", new Rect(228, 160, 162, 135), "red"));
+		shared.sprites.push(initSprite("a", new Rect(200, 160, 162, 125), "red"));
 		shared.sprites.forEach(stepSprite);
 		shared.sprites.forEach(drawSprite);
 	}
