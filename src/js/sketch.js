@@ -32,6 +32,7 @@ let tableHighlightImg, tableFullImg;
 let tableTask;
 let windowHighlightImg, windowFullImg;
 let windowTask;
+let hostClickCount, guestClickCount;
 
 function preload() {
 	partyConnect("wss://demoserver.p5party.org", "team1_gameB");
@@ -40,7 +41,9 @@ function preload() {
 	shared = partyLoadShared("globals", {
 		gameState: "intro",
 		windowTask: "false",
-		tableTask: "false"
+		tableTask: "false",
+		hostClickCount: 0,
+		guestClickCount: 0
 	});
 	roomImg = loadImage("./assets/images/room-layout.png");
 	checklistImg = loadImage("./assets/images/todo-list.png");
@@ -204,7 +207,7 @@ function drawTableGame() {
 	noStroke();
 	rect(120, 145, 567, 480);
 	pop();
-	
+
 	push();
 	stroke("orange");
 	strokeWeight(20);
@@ -334,6 +337,11 @@ function drawWindowGame() {
 	// mess to clean
 	image(g, 0, 0);
 
+	if (shared.hostClickCount >= 16 && shared.guestClickCount >= 10) {
+		shared.windowTask = "true";
+		shared.gameState = "playing";
+	} else return;
+
 	// done button
 	push();
 	fill("#f2f2f2");
@@ -361,9 +369,11 @@ function mouseClicked() {
 		if (partyIsHost()) {
 			g.fill("#ff9eed");
 			g.ellipse(my.x, my.y, 60);
+			shared.hostClickCount += 1;
 		} else {
 			g.erase();
 			g.ellipse(my.x, my.y, 120);
+			shared.guestClickCount += 1;
 		}
 	}
 }
