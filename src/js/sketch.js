@@ -185,12 +185,12 @@ function drawMain() {
 		}
 		// checklist
 		if (guest.x > 305 && guest.x < 505 && guest.y > 725 && guest.y < 775 && mouseIsPressed) {
-			image(checklistImg, 200, 80, 400, 650);
+			image(checklistImg, 200, 180, 400, 550);
 			push();
 			fill("#000066");
 			textSize(25);
-			text("- wipe the window", 400, 290);
-			text("- clean the table", 395, 340);
+			text("- wipe the window", 400, 360);
+			text("- clean the table", 395, 400);
 			pop();
 		}
 	}
@@ -208,19 +208,19 @@ function drawTableGame() {
 	rect(120, 145, 567, 480);
 	pop();
 
-	push();
-	stroke("orange");
-	strokeWeight(20);
-	noFill();
-	rect(385, 210, 105, 132, 2);
-	pop();
-
 	// push();
 	// stroke("red");
 	// strokeWeight(20);
 	// noFill();
 	// rect(228, 160, 162, 135, 2);
 	// pop();
+
+	push();
+	stroke("orange");
+	strokeWeight(20);
+	noFill();
+	rect(385, 210, 105, 132, 2);
+	pop();
 
 	push();
 	angleMode(DEGREES);
