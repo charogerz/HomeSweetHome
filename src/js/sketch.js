@@ -1,5 +1,8 @@
 // GameB from Team One - Charlotte, Chloe, Sophie, and Emma
 
+// Using code snippets from p5party's drag_fix_3 
+// https://p5party.org/examples/drag_fix_3/
+
 class Rect {
 	constructor(l = 0, t = 0, w = 0, h = 0) {
 		this.l = l;
