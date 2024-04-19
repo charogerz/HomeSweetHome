@@ -39,7 +39,7 @@ function preload() {
 	guests = partyLoadGuestShareds();
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
-		gameState: "intro",
+		gameState: "table-game",
 		windowTask: "false",
 		tableTask: "false",
 		hostClickCount: 0,
@@ -66,8 +66,12 @@ function setup() {
 	g.ellipse(320, 470, 300, 200);
 
 
-	if (partyIsHost()) {
+	if (partyIsHost() && shared.gameState === "table-game") {
 		shared.sprites = [];
+		shared.sprites.push(initSprite("a", new Rect(200, 160, 162, 125), "red"));
+		shared.sprites.push(initSprite("b", new Rect(240, 450, 105, 132), "red"));
+		shared.sprites.push(initSprite("c", new Rect(385, 260, 105, 132), "blue"));
+		shared.sprites.push(initSprite("d", new Rect(510, 320, 155, 132), "blue"));
 	}
 
 	partySubscribe("updateSprite", onUpdateSprite);
@@ -229,32 +233,8 @@ function drawTableGame() {
 	textSize(14);
 	text("blue here", 155, 615);
 
-
-	// push();
-	// fill("red");
-	// rect(200, 160, 162, 125);
-	// pop();
-
-	push();
-	fill("blue");
-	rect(385, 260, 105, 132);
-	pop();
-
-	push();
-	fill("blue");
-	rect(510, 320, 155, 132);
-	pop();
-
-	push();
-	fill("red");
-	rect(240, 450, 105, 132);
-	pop();
-
-	if (partyIsHost()) {
-		shared.sprites.push(initSprite("a", new Rect(200, 160, 162, 125), "red"));
-		shared.sprites.forEach(stepSprite);
-		shared.sprites.forEach(drawSprite);
-	}
+	shared.sprites.forEach(stepSprite);
+	shared.sprites.forEach(drawSprite);
 }
 
 function mousePressed() {
