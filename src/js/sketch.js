@@ -26,6 +26,7 @@ function pointInRect(p, r) {
 const my_id = Math.random();
 
 let shared;
+let soapShared, wipeShared;
 let my, guests;
 let roomImg;
 let g;
@@ -35,7 +36,7 @@ let tableHighlightImg, tableFullImg;
 let tableTask;
 let windowHighlightImg, windowFullImg;
 let windowTask;
-let hostClickCount, guestClickCount;
+let cleanPixels;
 
 function preload() {
 	partyConnect("wss://demoserver.p5party.org", "team1_gameB");
@@ -44,10 +45,12 @@ function preload() {
 	shared = partyLoadShared("globals", {
 		gameState: "intro",
 		windowTask: "false",
-		tableTask: "false",
-		hostClickCount: 0,
-		guestClickCount: 0
+		tableTask: "false"
 	});
+	soapShared = partyLoadShared("soap", { locations: []});
+	wipeShared = partyLoadShared("wipe", { locations: []});
+
+	// loading all images
 	roomImg = loadImage("./assets/images/room-layout.png");
 	checklistImg = loadImage("./assets/images/todo-list.png");
 	tableHighlightImg = loadImage("./assets/images/table-highlight.png");
@@ -60,15 +63,16 @@ function preload() {
 function setup() {
 	createCanvas(800, 800);
 
-	// graphics for window mess
+	// graphics buffer for window mess
 	g = createGraphics(800, 800);
 	g.fill("#bde7fc");
 	g.noStroke();
-	g.ellipse(300, 350, 400, 300);
-	g.ellipse(500, 420, 400, 300);
-	g.ellipse(320, 470, 300, 200);
+	g.ellipse(260, 300, 300, 200);
+	g.ellipse(500, 350, 400, 300);
+	g.ellipse(350, 470, 480, 240);
+	g.ellipse(500, 490, 400, 230);
 
-
+	// initializing rects on table
 	if (partyIsHost()) {
 		shared.sprites = [];
 		shared.sprites.push(initSprite("a", new Rect(200, 160, 162, 125), "red"));
@@ -321,38 +325,51 @@ function drawWindowGame() {
 	fill("#000066");
 	textSize(30);
 	text("Roommate 1: click to add suds", 350, 60);
-	text("Roommate 2: click to wipe away", 360, 90);
+	text("Roommate 2: click to wipe away suds", 395, 90);
+
+	// wipe away with erase
+	g.push();
+	g.erase();
+	for (const location of wipeShared.locations) {
+		g.ellipse(location.x, location.y, 100, 100);
+	}
+	g.noErase();
+	g.pop();
+
+	// calculate amount cleaned
+	cleanPixels = 0;
+	g.loadPixels();
+	for (let i = 3; i < g.pixels.length; i += 4) {
+		if (g.pixels[i] === 0) {
+     		cleanPixels++;
+		}
+	}
+	g.updatePixels();
 
 	// window
 	windowFullImg.resize(700, 500);
 	image(windowFullImg, 50, 150);
 
-	// mess to clean
+	// "dirt" to clean on window
 	image(g, 0, 0);
 
-	if (shared.hostClickCount >= 16 && shared.guestClickCount >= 10) {
+	// draw soap
+	for (const location of soapShared.locations) {
+		fill("#ff9eed");
+		ellipse(location.x, location.y, 40, 40);
+	}
+
+	// percent cleaned
+	fill("black");
+	const totalPixels = 800 * 800 * pixelDensity() * pixelDensity();
+	let percentCleaned = (cleanPixels / totalPixels) * 100;
+	textSize(20);
+	text(`Cleaned: ${floor(percentCleaned)}`, 80, 25);
+
+	// check percent cleaned
+	if (percentCleaned >= 98) {
 		shared.windowTask = "true";
 		shared.gameState = "playing";
-	} else return;
-
-	// done button
-	push();
-	fill("#f2f2f2");
-	stroke("#000066");
-	strokeWeight(5);
-	rect(305, 725, 200, 50, 20);
-	pop();
-	push();
-	textSize(20);
-	fill("#000066");
-	text("finished task!", 405, 755);
-	pop();
-
-	for (const guest of guests) {
-		if (guest.x > 305 && guest.x < 505 && guest.y > 725 && guest.y < 775 && mouseIsPressed) {
-			shared.windowTask = "true";
-			shared.gameState = "playing";
-		}
 	}
 }
 
@@ -360,13 +377,10 @@ function mouseClicked() {
 	// window cleaning functions
 	if (shared.gameState === "window-game") {
 		if (partyIsHost()) {
-			g.fill("#ff9eed");
-			g.ellipse(my.x, my.y, 60);
-			shared.hostClickCount += 1;
+			soapShared.locations.push({ x: mouseX, y: mouseY });
 		} else {
-			g.erase();
-			g.ellipse(my.x, my.y, 120);
-			shared.guestClickCount += 1;
+			if (soapShared.locations.find((location) => dist(location.x, location.y, mouseX, mouseY) < 20))
+			{wipeShared.locations.push({ x: mouseX, y: mouseY })};
 		}
 	}
 }
