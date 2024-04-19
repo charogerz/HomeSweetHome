@@ -66,7 +66,7 @@ function setup() {
 	g.ellipse(320, 470, 300, 200);
 
 
-	if (partyIsHost() && shared.gameState === "table-game") {
+	if (partyIsHost()) {
 		shared.sprites = [];
 		shared.sprites.push(initSprite("a", new Rect(200, 160, 162, 125), "red"));
 		shared.sprites.push(initSprite("b", new Rect(240, 450, 105, 132), "red"));
