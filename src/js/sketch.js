@@ -39,7 +39,7 @@ function preload() {
 	guests = partyLoadGuestShareds();
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
-		gameState: "table-game",
+		gameState: "intro",
 		windowTask: "false",
 		tableTask: "false",
 		hostClickCount: 0,
