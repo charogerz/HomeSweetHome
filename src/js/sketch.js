@@ -245,7 +245,7 @@ function mousePressed() {
 
 function mouseReleased() {
 	for (const s of shared.sprites.slice().reverse()) {
-		if (mouseReleasedSprites(s)) break;
+		if (mouseReleasedSprite(s)) break;
 	}
 }
 
