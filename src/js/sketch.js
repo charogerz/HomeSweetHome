@@ -33,6 +33,11 @@ let g;
 let checklistImg;
 let checkmark;
 let tableHighlightImg, tableFullImg;
+let redGoalX, redGoalY, blueGoalX, blueGoalY;
+let radius;
+let red1X, red1Y, red2X, red2Y;
+let blue1X, blue1Y, blue2X, blue2Y;
+let redGoalDone, blueGoalDone;
 let tableTask;
 let windowHighlightImg, windowFullImg;
 let windowTask;
@@ -45,6 +50,8 @@ function preload() {
 	shared = partyLoadShared("globals", {
 		gameState: "intro",
 		windowTask: "false",
+		redGoalDone: "false",
+		blueGoalDone: "false",
 		tableTask: "false"
 	});
 	soapShared = partyLoadShared("soap", { locations: []});
@@ -62,6 +69,13 @@ function preload() {
 
 function setup() {
 	createCanvas(800, 800);
+
+	// table game goals
+	redGoalX = 640;
+	redGoalY = 170;
+	blueGoalX = 155;
+	blueGoalY = 610;
+	radius = 80;
 
 	// graphics buffer for window mess
 	g = createGraphics(800, 800);
@@ -172,7 +186,7 @@ function drawMain() {
 	// hovers
 	for (const guest of guests) {
 		// table
-		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700) {
+		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700 && shared.tableTask === "false") {
 			image(tableHighlightImg, 81, 435, 307, 307);
 			if (shared.windowTask === "true") {
 				image(windowHighlightImg, 172, 101, 131, 131);
@@ -186,6 +200,10 @@ function drawMain() {
 		// window
 		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === "false") {
 			image(windowHighlightImg, 172, 101, 131, 131);
+			if (shared.tableTask === "true") {
+				image(tableHighlightImg, 81, 435, 307, 307);
+				image(checkmark, 200, 505, 70, 80);
+			}
 			if (mouseIsPressed) {
 				shared.gameState = "window-game";
 			}
@@ -194,6 +212,10 @@ function drawMain() {
 		if (shared.windowTask === "true") {
 			image(windowHighlightImg, 172, 101, 131, 131);
 			image(checkmark, 205, 112, 60, 70);
+		}
+		if (shared.tableTask === "true") {
+			image(tableHighlightImg, 81, 435, 307, 307);
+			image(checkmark, 200, 505, 70, 80);
 		}
 		// checklist
 		if (guest.x > 305 && guest.x < 505 && guest.y > 725 && guest.y < 775 && mouseIsPressed) {
@@ -206,6 +228,9 @@ function drawMain() {
 			pop();
 			if (shared.windowTask === "true") {
 				image(checkmark, 287, 330, 25, 30);
+			}
+			if (shared.tableTask === "true") {
+				image(checkmark, 287, 370, 25, 30);
 			}
 		}
 	}
@@ -229,19 +254,43 @@ function drawTableGame() {
 	rect(120, 145, 569, 480, 20);
 	// red goal
 	fill(255, 0, 0, 127);
-	ellipse(640, 170, 80);
+	ellipse(redGoalX, redGoalY, radius);
 	fill("#000066")
 	textSize(14);
 	text("red here", 640, 175);
 	// blue goal
 	fill(0, 0, 255, 127);
-	ellipse(155, 610, 80);
+	ellipse(blueGoalX, blueGoalY, radius);
 	fill("black")
 	textSize(14);
 	text("blue here", 155, 615);
 
 	shared.sprites.forEach(stepSprite);
 	shared.sprites.forEach(drawSprite);
+
+	checkTableItems();
+	if (shared.redGoalDone === "true" && shared.blueGoalDone === "true") {
+		shared.tableTask = "true";
+		shared.gameState = "playing";
+	}
+}
+
+function checkTableItems() {
+	red1X = shared.sprites[0].rect.l;
+	red1Y = shared.sprites[0].rect.t;
+	red2X = shared.sprites[1].rect.l;
+	red2Y = shared.sprites[1].rect.t;
+	blue1X = shared.sprites[2].rect.l;
+	blue1Y = shared.sprites[2].rect.t;
+	blue2X = shared.sprites[3].rect.l;
+	blue2Y = shared.sprites[3].rect.t;
+	
+	if (dist(red1X, red1Y, redGoalX, redGoalY) < 110 && dist(red2X, red2Y, redGoalX, redGoalY) < 110) {
+		shared.redGoalDone = "true";
+	}
+	if (dist(blue1X, blue1Y, blueGoalX, blueGoalY) < 110 && dist(blue2X, blue2Y, blueGoalX, blueGoalY) < 110) {
+		shared.blueGoalDone = "true";
+	}
 }
 
 function mousePressed() {
@@ -324,8 +373,9 @@ function drawWindowGame() {
 	// instructions
 	fill("#000066");
 	textSize(30);
-	text("Roommate 1: click to add suds", 350, 60);
-	text("Roommate 2: click to wipe away suds", 395, 90);
+	text("Roommate 1: click to add soap", 350, 60);
+	text("Roommate 2: click to wipe away", 360, 90);
+	text("dirt behind soap", 448, 120);
 
 	// wipe away with erase
 	g.push();
