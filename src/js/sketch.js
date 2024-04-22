@@ -363,11 +363,13 @@ function drawWindowGame() {
 	fill("black");
 	const totalPixels = 800 * 800 * pixelDensity() * pixelDensity();
 	let percentCleaned = (cleanPixels / totalPixels) * 100;
-	textSize(20);
-	text(`Cleaned: ${floor(percentCleaned)}`, 80, 25);
+	
+	// percentage cleaned in top left corner, for testing
+	// textSize(20);
+	// text(`Cleaned: ${floor(percentCleaned)}`, 80, 25);
 
-	// check percent cleaned
-	if (percentCleaned >= 98) {
+	// check percent cleaned, complete task
+	if (percentCleaned >= 95) {
 		shared.windowTask = "true";
 		shared.gameState = "playing";
 	}
