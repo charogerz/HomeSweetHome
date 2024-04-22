@@ -129,6 +129,11 @@ function draw() {
 		shared.gameState = "playing";
 	}
 
+	
+	if (shared.tableTask === "true" && shared.windowTask === "true") {
+		drawEnd();
+	}
+
 	// player cursors
 	for (const guest of guests) {
 		fill("yellow");
@@ -234,6 +239,19 @@ function drawMain() {
 			}
 		}
 	}
+}
+
+function drawEnd() {
+	background("#f2f2f2");
+	push();
+	image(checkmark, 350, 100, 150, 180);
+	fill("#000066");
+	textSize(50);
+	text("You did it!", width/2, height/2);
+	text("Congrats, roomies!", width/2, 480);
+	textSize(30);
+	text("Ctrl + R to play again", width/2, 700);
+	pop();
 }
 
 function drawTableGame() {
