@@ -28,6 +28,7 @@ const my_id = Math.random();
 let shared;
 let soapShared, wipeShared;
 let my, guests;
+let cursor;
 let roomImg;
 let g;
 let checklistImg;
@@ -59,6 +60,7 @@ function preload() {
 
 	// loading all images
 	roomImg = loadImage("./assets/images/room-layout.png");
+	cursor = loadImage("./assets/images/cursor.png");
 	checklistImg = loadImage("./assets/images/todo-list.png");
 	tableHighlightImg = loadImage("./assets/images/table-highlight.png");
 	tableFullImg = loadImage("./assets/images/dining-table.png");
@@ -136,9 +138,7 @@ function draw() {
 
 	// player cursors
 	for (const guest of guests) {
-		fill("yellow");
-		noStroke();
-		ellipse(guest.x, guest.y, 30, 30);
+		image(cursor, guest.x, guest.y);
 	}
 }
 

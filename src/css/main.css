@@ -3,9 +3,6 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-}
-
-body {
 	font-family: "Josefin Slab", serif;
 	display: flex;
 	justify-content: center;
