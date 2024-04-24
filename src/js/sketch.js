@@ -147,6 +147,7 @@ function draw() {
 function drawIntro() {
 	background("#000000");
 	image(titleScreen, 0, 0, width, height);
+	// commit update
 	textFont("Comic Sans MS");
 	textAlign(CENTER);
 	textStyle(BOLD);
