@@ -29,6 +29,7 @@ let shared;
 let soapShared, wipeShared;
 let my, guests;
 let cursor;
+let titleScreen;
 let roomImg;
 let g;
 let checklistImg;
@@ -59,6 +60,7 @@ function preload() {
 	wipeShared = partyLoadShared("wipe", { locations: []});
 
 	// loading all images
+    titleScreen = loadImage("./assets/images/title.gif");
 	roomImg = loadImage("./assets/images/room-layout.png");
 	cursor = loadImage("./assets/images/cursor.png");
 	checklistImg = loadImage("./assets/images/todo-list.png");
@@ -143,33 +145,33 @@ function draw() {
 }
 
 function drawIntro() {
-	background("#f2f2f2");
-	// Comic Sans! Can change :]
+	background("#000000");
+	image(titleScreen, 0, 0, width, height);
 	textFont("Comic Sans MS");
 	textAlign(CENTER);
 	textStyle(BOLD);
 	fill("#000066");
 
 	// title
-	push();
-	textSize(50);
-	text("Home Sweet Home!", width / 2, height / 3);
-	pop();
+		// push();
+		// textSize(50);
+		// text("Home Sweet Home!", width / 2, height / 3);
+		// pop();
 
 	// credits and brief intro
-	push();
-	textSize(25);
-	rectMode(CENTER);
-	text("Welcome to another game by Crikey!", width / 2, 325);
-	text("Many hands make light work!", width / 2, 450);
-	text(
-		'Work with your "roommate" to check off the to-do list items and tidy the room.',
-		width / 2,
-		460,
-		530
-	);
-	text("Press any key to continue >>>", width / 2, 650);
-	pop();
+		// push();
+		// textSize(25);
+		// rectMode(CENTER);
+		// text("Welcome to another game by Crikey!", width / 2, 325);
+		// text("Many hands make light work!", width / 2, 450);
+		// text(
+		// 	'Work with your "roommate" to check off the to-do list items and tidy the room.',
+		// 	width / 2,
+		// 	460,
+		// 	530
+		// );
+		// text("Press any key to continue >>>", width / 2, 650);
+		// pop();
 }
 
 function drawMain() {
