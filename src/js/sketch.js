@@ -1,4 +1,4 @@
-// GameB from Team One - Charlotte, Chloe, Sophie, and Emma
+// Home Sweet Home, a game from Crikey - members Charlotte, Chloe, Emma, and Sophie
 
 // Using code snippets from p5party's drag_fix_3 
 // https://p5party.org/examples/drag_fix_3/
@@ -25,25 +25,25 @@ function pointInRect(p, r) {
 
 const my_id = Math.random();
 
+// image array
+let images = [];
+
+// shared variables
 let shared;
 let soapShared, wipeShared;
 let my, guests;
-let cursor;
-let titleScreen;
-let roomImg;
+
+// graphic layer for window game
 let g;
-let checklistImg;
-let checkmark;
-let tableHighlightImg, tableFullImg;
+
+// pixels cleaned in window game
+let cleanPixels;
+
+// table item variables
 let redGoalX, redGoalY, blueGoalX, blueGoalY;
 let radius;
 let red1X, red1Y, red2X, red2Y;
 let blue1X, blue1Y, blue2X, blue2Y;
-let redGoalDone, blueGoalDone;
-let tableTask;
-let windowHighlightImg, windowFullImg;
-let windowTask;
-let cleanPixels;
 
 function preload() {
 	partyConnect("wss://demoserver.p5party.org", "team1_gameB");
@@ -51,24 +51,24 @@ function preload() {
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
 		gameState: "intro",
-		windowTask: "false",
-		redGoalDone: "false",
-		blueGoalDone: "false",
-		tableTask: "false"
+		windowTask: false,
+		redGoalDone: false,
+		blueGoalDone: false,
+		tableTask: false
 	});
 	soapShared = partyLoadShared("soap", { locations: []});
 	wipeShared = partyLoadShared("wipe", { locations: []});
 
 	// loading all images
-    titleScreen = loadImage("./assets/images/title.gif");
-	roomImg = loadImage("./assets/images/room-layout.png");
-	cursor = loadImage("./assets/images/cursor.png");
-	checklistImg = loadImage("./assets/images/todo-list.png");
-	tableHighlightImg = loadImage("./assets/images/table-highlight.png");
-	tableFullImg = loadImage("./assets/images/dining-table.png");
-	windowHighlightImg = loadImage("./assets/images/window-highlight.png");
-	windowFullImg = loadImage("./assets/images/window.png");
-	checkmark = loadImage("./assets/images/checkmark.png");
+    images.titleScreen = loadImage("./assets/images/title.gif");
+	images.room = loadImage("./assets/images/room-layout.png");
+	images.cursor = loadImage("./assets/images/cursor.png");
+	images.checklist = loadImage("./assets/images/todo-list.png");
+	images.tableHighlight = loadImage("./assets/images/table-highlight.png");
+	images.tableZoom = loadImage("./assets/images/dining-table.png");
+	images.windowHighlight = loadImage("./assets/images/window-highlight.png");
+	images.windowZoom = loadImage("./assets/images/window.png");
+	images.checkmark = loadImage("./assets/images/checkmark.png");
 }
 
 function setup() {
@@ -118,10 +118,14 @@ function onUpdateSprite({ id, updates }) {
 
 function draw() {
 	background("#f2f2f2");
+	textFont("Comic Sans MS");
+	textAlign(CENTER);
+	textStyle(BOLD);
+	fill("#000066");
 
 	if (shared.gameState === "intro") {
 		drawIntro();
-	} else if (shared.gameState === "playing") {
+	} else if (shared.gameState === "main") {
 		drawMain();
 	} else if (shared.gameState === "table-game") {
 		drawTableGame();
@@ -129,54 +133,28 @@ function draw() {
 		drawWindowGame();
 	}
 
-	if (shared.gameState === "intro" && keyIsPressed === true) {
-		shared.gameState = "playing";
+	if (shared.gameState === "intro" && keyIsPressed) {
+		shared.gameState = "main";
 	}
 
 	
-	if (shared.tableTask === "true" && shared.windowTask === "true") {
+	if (shared.tableTask && shared.windowTask) {
 		drawEnd();
 	}
 
 	// player cursors
 	for (const guest of guests) {
-		image(cursor, guest.x, guest.y);
+		image(images.cursor, guest.x, guest.y);
 	}
 }
 
 function drawIntro() {
 	background("#000000");
-	image(titleScreen, 0, 0, width, height);
-	// commit update
-	textFont("Comic Sans MS");
-	textAlign(CENTER);
-	textStyle(BOLD);
-	fill("#000066");
-
-	// title
-		// push();
-		// textSize(50);
-		// text("Home Sweet Home!", width / 2, height / 3);
-		// pop();
-
-	// credits and brief intro
-		// push();
-		// textSize(25);
-		// rectMode(CENTER);
-		// text("Welcome to another game by Crikey!", width / 2, 325);
-		// text("Many hands make light work!", width / 2, 450);
-		// text(
-		// 	'Work with your "roommate" to check off the to-do list items and tidy the room.',
-		// 	width / 2,
-		// 	460,
-		// 	530
-		// );
-		// text("Press any key to continue >>>", width / 2, 650);
-		// pop();
+	image(images.titleScreen, 0, 0, width, height);
 }
 
 function drawMain() {
-	background(roomImg);
+	background(images.room);
 
 	// checklist button
 	push();
@@ -194,11 +172,11 @@ function drawMain() {
 	// hovers
 	for (const guest of guests) {
 		// table
-		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700 && shared.tableTask === "false") {
-			image(tableHighlightImg, 81, 435, 307, 307);
-			if (shared.windowTask === "true") {
-				image(windowHighlightImg, 172, 101, 131, 131);
-				image(checkmark, 205, 112, 60, 70);
+		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700 && shared.tableTask === false) {
+			image(images.tableHighlight, 81, 435, 307, 307);
+			if (shared.windowTask) {
+				image(images.windowHighlight, 172, 101, 131, 131);
+				image(images.checkmark, 205, 112, 60, 70);
 			}
 			if (mouseIsPressed) {
 				shared.gameState = "table-game";
@@ -206,39 +184,39 @@ function drawMain() {
 			return;
 		}
 		// window
-		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === "false") {
-			image(windowHighlightImg, 172, 101, 131, 131);
-			if (shared.tableTask === "true") {
-				image(tableHighlightImg, 81, 435, 307, 307);
-				image(checkmark, 200, 505, 70, 80);
+		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === false) {
+			image(images.windowHighlight, 172, 101, 131, 131);
+			if (shared.tableTask) {
+				image(images.tableHighlight, 81, 435, 307, 307);
+				image(images.checkmark, 200, 505, 70, 80);
 			}
 			if (mouseIsPressed) {
 				shared.gameState = "window-game";
 			}
 			return;
 		}
-		if (shared.windowTask === "true") {
-			image(windowHighlightImg, 172, 101, 131, 131);
-			image(checkmark, 205, 112, 60, 70);
+		if (shared.windowTask) {
+			image(images.windowHighlight, 172, 101, 131, 131);
+			image(images.checkmark, 205, 112, 60, 70);
 		}
-		if (shared.tableTask === "true") {
-			image(tableHighlightImg, 81, 435, 307, 307);
-			image(checkmark, 200, 505, 70, 80);
+		if (shared.tableTask) {
+			image(images.tableHighlight, 81, 435, 307, 307);
+			image(images.checkmark, 200, 505, 70, 80);
 		}
 		// checklist
 		if (guest.x > 305 && guest.x < 505 && guest.y > 725 && guest.y < 775 && mouseIsPressed) {
-			image(checklistImg, 200, 180, 400, 550);
+			image(images.checklist, 200, 180, 400, 550);
 			push();
 			fill("#000066");
 			textSize(25);
 			text("- wipe the window", 400, 360);
 			text("- clean the table", 395, 400);
 			pop();
-			if (shared.windowTask === "true") {
-				image(checkmark, 287, 330, 25, 30);
+			if (shared.windowTask) {
+				image(images.checkmark, 287, 330, 25, 30);
 			}
-			if (shared.tableTask === "true") {
-				image(checkmark, 287, 370, 25, 30);
+			if (shared.tableTask) {
+				image(images.checkmark, 287, 370, 25, 30);
 			}
 		}
 	}
@@ -247,7 +225,7 @@ function drawMain() {
 function drawEnd() {
 	background("#f2f2f2");
 	push();
-	image(checkmark, 350, 100, 150, 180);
+	image(images.checkmark, 350, 100, 150, 180);
 	fill("#000066");
 	textSize(50);
 	text("You did it!", width/2, height/2);
@@ -259,8 +237,8 @@ function drawEnd() {
 
 function drawTableGame() {
 	background("#f2f2f2");
-	tableFullImg.resize(1000, 800);
-	image(tableFullImg, -100, 90);
+	images.tableZoom.resize(1000, 800);
+	image(images.tableZoom, -100, 90);
 	noStroke();
 
 	// instructions
@@ -290,9 +268,9 @@ function drawTableGame() {
 	shared.sprites.forEach(drawSprite);
 
 	checkTableItems();
-	if (shared.redGoalDone === "true" && shared.blueGoalDone === "true") {
-		shared.tableTask = "true";
-		shared.gameState = "playing";
+	if (shared.redGoalDone && shared.blueGoalDone) {
+		shared.tableTask = true;
+		shared.gameState = "main";
 	}
 }
 
@@ -307,10 +285,10 @@ function checkTableItems() {
 	blue2Y = shared.sprites[3].rect.t;
 	
 	if (dist(red1X, red1Y, redGoalX, redGoalY) < 110 && dist(red2X, red2Y, redGoalX, redGoalY) < 110) {
-		shared.redGoalDone = "true";
+		shared.redGoalDone = true;
 	}
 	if (dist(blue1X, blue1Y, blueGoalX, blueGoalY) < 110 && dist(blue2X, blue2Y, blueGoalX, blueGoalY) < 110) {
-		shared.blueGoalDone = "true";
+		shared.blueGoalDone = true;
 	}
 }
 
@@ -418,8 +396,8 @@ function drawWindowGame() {
 	g.updatePixels();
 
 	// window
-	windowFullImg.resize(700, 500);
-	image(windowFullImg, 50, 150);
+	images.windowZoom.resize(700, 500);
+	image(images.windowZoom, 50, 150);
 
 	// "dirt" to clean on window
 	image(g, 0, 0);
@@ -434,15 +412,11 @@ function drawWindowGame() {
 	fill("black");
 	const totalPixels = 800 * 800 * pixelDensity() * pixelDensity();
 	let percentCleaned = (cleanPixels / totalPixels) * 100;
-	
-	// percentage cleaned in top left corner, for testing
-	// textSize(20);
-	// text(`Cleaned: ${floor(percentCleaned)}`, 80, 25);
 
 	// check percent cleaned, complete task
 	if (percentCleaned >= 95) {
-		shared.windowTask = "true";
-		shared.gameState = "playing";
+		shared.windowTask = true;
+		shared.gameState = "main";
 	}
 }
 
@@ -464,7 +438,7 @@ function mouseClicked() {
 // MULTICOLOR DRAG AND DRAW, MAYBE USEFUL?
 // function draw() {
 
-// 	if (mouseIsPressed === true) {
+// 	if (mouseIsPressed) {
 // 	  ellipse(mouseX, mouseY, 15,20,30);
 // 	  // fill("#dfeed3")
 // 	  // rect(mouseX, mouseY, 15,20,30);
