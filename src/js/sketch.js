@@ -74,6 +74,8 @@ function preload() {
 function setup() {
 	createCanvas(800, 800);
 
+	noCursor();
+
 	// table game goals
 	redGoalX = 640;
 	redGoalY = 170;
@@ -131,18 +133,21 @@ function draw() {
 		drawTableGame();
 	} else if (shared.gameState === "window-game") {
 		drawWindowGame();
+	} else if (shared.gameState === "end") {
+		drawEnd();
 	}
 
+	// checks for button clicked on intro
 	if (shared.gameState === "intro" && keyIsPressed) {
 		shared.gameState = "main";
 	}
 
-	
+	// checks for end game by checking each mini game task
 	if (shared.tableTask && shared.windowTask) {
-		drawEnd();
+		shared.gameState = "end";
 	}
 
-	// player cursors
+	// draw player cursors
 	for (const guest of guests) {
 		image(images.cursor, guest.x, guest.y);
 	}
@@ -431,17 +436,3 @@ function mouseClicked() {
 		}
 	}
 }
-
-////////// IGNORE BELOW, KEEPING CODE NOTES FOR LATER
-
-
-// MULTICOLOR DRAG AND DRAW, MAYBE USEFUL?
-// function draw() {
-
-// 	if (mouseIsPressed) {
-// 	  ellipse(mouseX, mouseY, 15,20,30);
-// 	  // fill("#dfeed3")
-// 	  // rect(mouseX, mouseY, 15,20,30);
-// 	  fill(225, random(225), random(225));
-// 	}
-//   }
