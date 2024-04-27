@@ -161,18 +161,27 @@ function drawIntro() {
 function drawMain() {
 	background(images.room);
 
-	// checklist button
+	// checklist
 	push();
-	noFill();
+	fill(98, 98, 166, 120);
 	stroke("#000066");
 	strokeWeight(5);
-	rect(305, 725, 200, 50, 20);
+	rect(530, 0, 230, 120, 3);
 	pop();
 	push();
-	textSize(20);
 	fill("#000066");
-	text("click for checklist", 405, 755);
+	textSize(20);
+	textAlign(LEFT);
+	text("TO-DO:", 550, 30);
+	text("- wipe the window", 550, 60);
+	text("- clean the table", 550, 90);
 	pop();
+	if (shared.windowTask) {
+		image(images.checkmark, 550, 38, 20, 20);
+	}
+	if (shared.tableTask) {
+		image(images.checkmark, 550, 68, 20, 20);
+	}
 
 	// hovers
 	for (const guest of guests) {
@@ -207,22 +216,6 @@ function drawMain() {
 		if (shared.tableTask) {
 			image(images.tableHighlight, 81, 435, 307, 307);
 			image(images.checkmark, 200, 505, 70, 80);
-		}
-		// checklist
-		if (guest.x > 305 && guest.x < 505 && guest.y > 725 && guest.y < 775 && mouseIsPressed) {
-			image(images.checklist, 200, 180, 400, 550);
-			push();
-			fill("#000066");
-			textSize(25);
-			text("- wipe the window", 400, 360);
-			text("- clean the table", 395, 400);
-			pop();
-			if (shared.windowTask) {
-				image(images.checkmark, 287, 330, 25, 30);
-			}
-			if (shared.tableTask) {
-				image(images.checkmark, 287, 370, 25, 30);
-			}
 		}
 	}
 }
