@@ -1,5 +1,8 @@
 // Home Sweet Home, a game from Crikey - members Charlotte, Chloe, Emma, and Sophie
 
+// Work with your "roommate" to check off the to-do list items and tidy the room!
+// Cooperative cozy game for two players, using only the mouse to point, click, and drag items
+
 // Using code snippets from p5party's drag_fix_3 
 // https://p5party.org/examples/drag_fix_3/
 
@@ -54,7 +57,8 @@ function preload() {
 		windowTask: false,
 		redGoalDone: false,
 		blueGoalDone: false,
-		tableTask: false
+		tableTask: false,
+		plantTask: false
 	});
 	soapShared = partyLoadShared("soap", { locations: []});
 	wipeShared = partyLoadShared("wipe", { locations: []});
@@ -63,12 +67,12 @@ function preload() {
     images.titleScreen = loadImage("./assets/images/title.gif");
 	images.room = loadImage("./assets/images/room-layout.png");
 	images.cursor = loadImage("./assets/images/cursor.png");
-	images.checklist = loadImage("./assets/images/todo-list.png");
 	images.tableHighlight = loadImage("./assets/images/table-highlight.png");
 	images.tableZoom = loadImage("./assets/images/dining-table.png");
 	images.windowHighlight = loadImage("./assets/images/window-highlight.png");
 	images.windowZoom = loadImage("./assets/images/window.png");
 	images.checkmark = loadImage("./assets/images/checkmark.png");
+	images.plantHighlight = loadImage("./assets/images/plant-highlight.png");
 }
 
 function setup() {
@@ -209,6 +213,12 @@ function drawMain() {
 			}
 			return;
 		}
+		// plant
+		if (guest.x > 700 && guest.x < 800 && guest.y > 620 && guest.y < 760 && shared.plantTask === false) {
+			image(images.plantHighlight, 681, 631, 149, 152);
+		}
+
+		// remove hover from games completed
 		if (shared.windowTask) {
 			image(images.windowHighlight, 172, 101, 131, 131);
 			image(images.checkmark, 205, 112, 60, 70);
