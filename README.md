@@ -1,8 +1,8 @@
-# GameB [^1]
+# Home Sweet Home [^1]
 
-Welcome to Game B from Crikey!
+Welcome to Home Sweet Home from Crikey!
 
-Game B is an online multiplayer game made using the [p5party↗](https://p5party.org/) library.
+Home Sweet Home is a cooperative online multiplayer game made using the [p5party↗](https://p5party.org/) library.
 
 ### [Play here↗](https://rogec540.github.io/GameB/src/index.html)
 
