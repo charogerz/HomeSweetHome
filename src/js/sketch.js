@@ -147,7 +147,7 @@ function draw() {
 	}
 
 	// checks for end game by checking each mini game task
-	if (shared.tableTask && shared.windowTask) {
+	if (shared.tableTask && shared.windowTask && shared.plantTask) {
 		shared.gameState = "end";
 	}
 
@@ -170,7 +170,7 @@ function drawMain() {
 	fill(98, 98, 166, 120);
 	stroke("#000066");
 	strokeWeight(5);
-	rect(530, 0, 230, 120, 3);
+	rect(530, 0, 230, 135, 3);
 	pop();
 	push();
 	fill("#000066");
@@ -179,6 +179,7 @@ function drawMain() {
 	text("TO-DO:", 550, 30);
 	text("- wipe the window", 550, 60);
 	text("- clean the table", 550, 90);
+	text("- prune the plant", 550, 120);
 	pop();
 	if (shared.windowTask) {
 		image(images.checkmark, 550, 38, 20, 20);
@@ -186,13 +187,25 @@ function drawMain() {
 	if (shared.tableTask) {
 		image(images.checkmark, 550, 68, 20, 20);
 	}
+	if (shared.plantTask) {
+		image(images.checkmark, 550, 98, 20, 20);
+	}
 
 	// hovers
 	for (const guest of guests) {
 		// table
 		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700 && shared.tableTask === false) {
 			image(images.tableHighlight, 81, 435, 307, 307);
-			if (shared.windowTask) {
+			if (shared.windowTask && shared.plantTask === false) {
+				image(images.windowHighlight, 172, 101, 131, 131);
+				image(images.checkmark, 205, 112, 60, 70);
+			} else if (shared.plantTask && shared.windowTask === false) {
+				image(images.plantHighlight, 681, 631, 149, 152);
+				image(images.checkmark, 730, 680, 50, 50);
+			} else if (shared.plantTask && shared.windowTask) {
+				image(images.plantHighlight, 681, 631, 149, 152);
+				image(images.checkmark, 730, 680, 50, 50);
+
 				image(images.windowHighlight, 172, 101, 131, 131);
 				image(images.checkmark, 205, 112, 60, 70);
 			}
@@ -204,7 +217,16 @@ function drawMain() {
 		// window
 		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === false) {
 			image(images.windowHighlight, 172, 101, 131, 131);
-			if (shared.tableTask) {
+			if (shared.tableTask && shared.plantTask === false) {
+				image(images.tableHighlight, 81, 435, 307, 307);
+				image(images.checkmark, 200, 505, 70, 80);
+			} else if (shared.plantTask && shared.tableTask === false) {
+				image(images.plantHighlight, 681, 631, 149, 152);
+				image(images.checkmark, 730, 680, 50, 50);			
+			} else if (shared.plantTask && shared.tableTask) {
+				image(images.plantHighlight, 681, 631, 149, 152);
+				image(images.checkmark, 730, 680, 50, 50);
+
 				image(images.tableHighlight, 81, 435, 307, 307);
 				image(images.checkmark, 200, 505, 70, 80);
 			}
@@ -216,9 +238,22 @@ function drawMain() {
 		// plant
 		if (guest.x > 700 && guest.x < 800 && guest.y > 620 && guest.y < 760 && shared.plantTask === false) {
 			image(images.plantHighlight, 681, 631, 149, 152);
+			if (shared.tableTask && shared.windowTask === false) {
+				image(images.tableHighlight, 81, 435, 307, 307);
+				image(images.checkmark, 200, 505, 70, 80);
+			} else if (shared.windowTask && shared.tableTask === false) {
+				image(images.windowHighlight, 172, 101, 131, 131);
+				image(images.checkmark, 205, 112, 60, 70);
+			} else if (shared.windowTask && shared.tableTask) {
+				image(images.tableHighlight, 81, 435, 307, 307);
+				image(images.checkmark, 200, 505, 70, 80);
+
+				image(images.windowHighlight, 172, 101, 131, 131);
+				image(images.checkmark, 205, 112, 60, 70);
+			}
 		}
 
-		// remove hover from games completed
+		// remove hover from completed sections
 		if (shared.windowTask) {
 			image(images.windowHighlight, 172, 101, 131, 131);
 			image(images.checkmark, 205, 112, 60, 70);
@@ -226,6 +261,10 @@ function drawMain() {
 		if (shared.tableTask) {
 			image(images.tableHighlight, 81, 435, 307, 307);
 			image(images.checkmark, 200, 505, 70, 80);
+		}
+		if (shared.plantTask) {
+			image(images.plantHighlight, 681, 631, 149, 152);
+			image(images.checkmark, 730, 680, 50, 50);
 		}
 	}
 }
