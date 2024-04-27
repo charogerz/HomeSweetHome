@@ -73,6 +73,7 @@ function preload() {
 	images.windowZoom = loadImage("./assets/images/window.png");
 	images.checkmark = loadImage("./assets/images/checkmark.png");
 	images.plantHighlight = loadImage("./assets/images/plant-highlight.png");
+	images.plantZoom = loadImage("./assets/images/plant.png");
 }
 
 function setup() {
@@ -137,6 +138,8 @@ function draw() {
 		drawTableGame();
 	} else if (shared.gameState === "window-game") {
 		drawWindowGame();
+	} else if (shared.gameState === "plant-game") {
+		drawPlantGame();
 	} else if (shared.gameState === "end") {
 		drawEnd();
 	}
@@ -251,6 +254,10 @@ function drawMain() {
 				image(images.windowHighlight, 172, 101, 131, 131);
 				image(images.checkmark, 205, 112, 60, 70);
 			}
+			if (mouseIsPressed) {
+				shared.gameState = "plant-game";
+			}
+			return;
 		}
 
 		// remove hover from completed sections
@@ -280,6 +287,12 @@ function drawEnd() {
 	textSize(30);
 	text("Ctrl + R to play again", width/2, 700);
 	pop();
+}
+
+function drawPlantGame() {
+	background("#f2f2f2");
+	images.plantZoom.resize(400, 600);
+	image(images.plantZoom, 200, 90);
 }
 
 function drawTableGame() {
