@@ -114,6 +114,11 @@ function mouseMoved(e) {
 	my.y = mouseY;
 }
 
+function mouseDragged(e) {
+	my.x = mouseX;
+	my.y = mouseY;
+}
+
 function onUpdateSprite({ id, updates }) {
 	if (!partyIsHost()) return;
 	const s = shared.sprites.find((s) => s.id === id);
@@ -293,6 +298,8 @@ function drawPlantGame() {
 	background("#f2f2f2");
 	images.plantZoom.resize(400, 600);
 	image(images.plantZoom, 200, 90);
+
+
 }
 
 function drawTableGame() {
