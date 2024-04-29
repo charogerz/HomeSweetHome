@@ -37,7 +37,10 @@ let soapShared, wipeShared;
 let my, guests;
 
 // graphic layer for window game
-let g;
+let gWindow;
+
+// graphic layer for plant game
+let gPlant;
 
 // pixels cleaned in window game
 let cleanPixels;
@@ -89,13 +92,20 @@ function setup() {
 	radius = 80;
 
 	// graphics buffer for window mess
-	g = createGraphics(800, 800);
-	g.fill("#bde7fc");
-	g.noStroke();
-	g.ellipse(260, 300, 300, 200);
-	g.ellipse(500, 350, 400, 300);
-	g.ellipse(350, 470, 480, 240);
-	g.ellipse(500, 490, 400, 230);
+	gWindow = createGraphics(800, 800);
+	gWindow.fill("#bde7fc");
+	gWindow.noStroke();
+	gWindow.ellipse(260, 300, 300, 200);
+	gWindow.ellipse(500, 350, 400, 300);
+	gWindow.ellipse(350, 470, 480, 240);
+	gWindow.ellipse(500, 490, 400, 230);
+
+	// graphics buffer for plant dirt and bark
+	gPlant = createGraphics(800, 800);
+	gPlant.fill("#9e5c21");
+	gPlant.noStroke();
+	gPlant.rect(350, 500, 160, 85, 24);
+	gPlant.rect(365, 410, 80, 100, 18);
 
 	// initializing rects on table
 	if (partyIsHost()) {
@@ -187,7 +197,7 @@ function drawMain() {
 	text("TO-DO:", 550, 30);
 	text("- wipe the window", 550, 60);
 	text("- clean the table", 550, 90);
-	text("- prune the plant", 550, 120);
+	text("- care for the plant", 550, 120);
 	pop();
 	if (shared.windowTask) {
 		image(images.checkmark, 550, 38, 20, 20);
@@ -296,7 +306,21 @@ function drawEnd() {
 
 function drawPlantGame() {
 	background("#f2f2f2");
-	images.plantZoom.resize(400, 600);
+
+	// instructions
+	push();
+	fill("#000066");
+	textSize(30);
+	textAlign(LEFT);
+	text("Roommate 1: water the plant", 150, 40);
+	text("Roommate 2: trim branches to prune", 150, 70);
+	pop();
+	
+	// dirt
+	image(gPlant, 0, 0);
+	
+	// plant
+	images.plantZoom.resize(450, 670);
 	image(images.plantZoom, 200, 90);
 
 
@@ -444,30 +468,30 @@ function drawWindowGame() {
 	text("dirt behind soap", 448, 120);
 
 	// wipe away with erase
-	g.push();
-	g.erase();
+	gWindow.push();
+	gWindow.erase();
 	for (const location of wipeShared.locations) {
-		g.ellipse(location.x, location.y, 100, 100);
+		gWindow.ellipse(location.x, location.y, 100, 100);
 	}
-	g.noErase();
-	g.pop();
+	gWindow.noErase();
+	gWindow.pop();
 
 	// calculate amount cleaned
 	cleanPixels = 0;
-	g.loadPixels();
-	for (let i = 3; i < g.pixels.length; i += 4) {
-		if (g.pixels[i] === 0) {
+	gWindow.loadPixels();
+	for (let i = 3; i < gWindow.pixels.length; i += 4) {
+		if (gWindow.pixels[i] === 0) {
      		cleanPixels++;
 		}
 	}
-	g.updatePixels();
+	gWindow.updatePixels();
 
 	// window
 	images.windowZoom.resize(700, 500);
 	image(images.windowZoom, 50, 150);
 
 	// "dirt" to clean on window
-	image(g, 0, 0);
+	image(gWindow, 0, 0);
 
 	// draw soap
 	for (const location of soapShared.locations) {
