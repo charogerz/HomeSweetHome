@@ -34,6 +34,7 @@ let images = [];
 // shared variables
 let shared;
 let soapShared, wipeShared;
+let waterShared;
 let my, guests;
 
 // graphic layer for window game
@@ -65,6 +66,7 @@ function preload() {
 	});
 	soapShared = partyLoadShared("soap", { locations: []});
 	wipeShared = partyLoadShared("wipe", { locations: []});
+	waterShared = partyLoadShared("water", { locations: [] });
 
 	// loading all images
     images.titleScreen = loadImage("./assets/images/title.gif");
@@ -323,7 +325,12 @@ function drawPlantGame() {
 	images.plantZoom.resize(450, 670);
 	image(images.plantZoom, 200, 90);
 
-
+	// watering function
+	for (const location of waterShared.locations) {
+		noStroke();
+		fill("blue");
+		ellipse(location.x, location.y, 10, 10);
+	}
 }
 
 function drawTableGame() {
@@ -519,6 +526,13 @@ function mouseClicked() {
 		} else {
 			if (soapShared.locations.find((location) => dist(location.x, location.y, mouseX, mouseY) < 20))
 			{wipeShared.locations.push({ x: mouseX, y: mouseY })};
+		}
+	}
+
+	// plant watering functions
+	if(shared.gameState === "plant-game") {
+		if (partyIsHost()) {
+			waterShared.locations.push({ x:mouseX, y: mouseY });
 		}
 	}
 }
