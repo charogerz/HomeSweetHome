@@ -71,7 +71,7 @@ function preload() {
 	// loading all images
     images.titleScreen = loadImage("./assets/images/title.gif");
 	images.room = loadImage("./assets/images/room-layout.png");
-	images.cursor = loadImage("./assets/images/cursor.png");
+	images.cursor = loadImage("./assets/images/cursor-resized.png");
 	images.tableZoom = loadImage("./assets/images/table-resized.png");
 	images.windowZoom = loadImage("./assets/images/window-resized.png");
 	images.checkmark = loadImage("./assets/images/checkmark.png");
