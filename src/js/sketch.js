@@ -533,6 +533,10 @@ function mouseClicked() {
 	if(shared.gameState === "plant-game") {
 		if (partyIsHost()) {
 			waterShared.locations.push({ x:mouseX, y: mouseY });
+			if (waterShared.locations.length >= 15) {
+				shared.plantTask = true;
+				shared.gameState = "main";
+			}
 		}
 	}
 }
