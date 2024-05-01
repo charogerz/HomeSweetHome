@@ -379,6 +379,21 @@ function drawEnd() {
 function drawPlantGame() {
 	background("#f2f2f2");
 
+	// back button 
+	push();
+	noFill();
+	stroke("#000066");
+	strokeWeight(5);
+	rect(20, 750, 150, 40, 20);
+	pop();
+	textSize(25);
+	text("<<< back", 90, 780);
+	for (const guest of guests) {
+		if (guest.x > 20 && guest.x < 170 && guest.y > 750 && guest.y < 800 && mouseIsPressed) {
+			shared.gameState = "main";
+		}
+	}
+
 	// instructions
 	push();
 	fill("#000066");
@@ -408,6 +423,21 @@ function drawTableGame() {
 	images.tableZoom.resize(1000, 800);
 	image(images.tableZoom, -100, 90);
 	noStroke();
+
+	// back button 
+	push();
+	noFill();
+	stroke("#000066");
+	strokeWeight(5);
+	rect(20, 750, 150, 40, 20);
+	pop();
+	textSize(25);
+	text("<<< back", 90, 780);
+	for (const guest of guests) {
+		if (guest.x > 20 && guest.x < 170 && guest.y > 750 && guest.y < 800 && mouseIsPressed) {
+			shared.gameState = "main";
+		}
+	}
 
 	// instructions
 	fill("#000066");
@@ -536,6 +566,21 @@ function mouseReleasedSprite(s) {
 
 function drawWindowGame() {
 	background("#f2f2f2");
+
+	// back button 
+	push();
+	noFill();
+	stroke("#000066");
+	strokeWeight(5);
+	rect(20, 750, 150, 40, 20);
+	pop();
+	textSize(25);
+	text("<<< back", 90, 780);
+	for (const guest of guests) {
+		if (guest.x > 20 && guest.x < 170 && guest.y > 750 && guest.y < 800 && mouseIsPressed) {
+			shared.gameState = "main";
+		}
+	}
 
 	// instructions
 	fill("#000066");
