@@ -57,7 +57,7 @@ function preload() {
 	guests = partyLoadGuestShareds();
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
-		gameState: "end",
+		gameState: "intro",
 		windowTask: false,
 		redGoalDone: false,
 		blueGoalDone: false,
@@ -72,13 +72,11 @@ function preload() {
     images.titleScreen = loadImage("./assets/images/title.gif");
 	images.room = loadImage("./assets/images/room-layout.png");
 	images.cursor = loadImage("./assets/images/cursor.png");
-	images.tableHighlight = loadImage("./assets/images/table-highlight.png");
 	images.tableZoom = loadImage("./assets/images/dining-table.png");
-	images.windowHighlight = loadImage("./assets/images/window-highlight.png");
 	images.windowZoom = loadImage("./assets/images/window.png");
 	images.checkmark = loadImage("./assets/images/checkmark.png");
-	images.plantHighlight = loadImage("./assets/images/plant-highlight.png");
 	images.plantZoom = loadImage("./assets/images/plant.png");
+    images.highlight = loadImage("./assets/images/highlight.png");
 }
 
 function setup() {
@@ -215,18 +213,33 @@ function drawMain() {
 	for (const guest of guests) {
 		// table
 		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700 && shared.tableTask === false) {
-			image(images.tableHighlight, 81, 435, 307, 307);
+          push();
+          tint(255, 180);
+			image(images.highlight, 81, 435, 307, 307);
+          pop();
 			if (shared.windowTask && shared.plantTask === false) {
-				image(images.windowHighlight, 172, 101, 131, 131);
+              push();
+              tint(255, 180);
+				image(images.highlight, 172, 101, 131, 131);
+              pop();
 				image(images.checkmark, 205, 112, 60, 70);
 			} else if (shared.plantTask && shared.windowTask === false) {
-				image(images.plantHighlight, 681, 631, 149, 152);
+                push();
+              tint(255, 180);
+				image(images.highlight, 681, 631, 149, 152);
+              pop();
 				image(images.checkmark, 730, 680, 50, 50);
 			} else if (shared.plantTask && shared.windowTask) {
-				image(images.plantHighlight, 681, 631, 149, 152);
+              push();
+              tint(255, 180);
+				image(images.highlight, 681, 631, 149, 152);
+              pop();
 				image(images.checkmark, 730, 680, 50, 50);
 
-				image(images.windowHighlight, 172, 101, 131, 131);
+              push();
+              tint(255, 180);
+				image(images.highlight, 172, 101, 131, 131);
+              pop();
 				image(images.checkmark, 205, 112, 60, 70);
 			}
 			if (mouseIsPressed) {
@@ -236,18 +249,33 @@ function drawMain() {
 		}
 		// window
 		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === false) {
-			image(images.windowHighlight, 172, 101, 131, 131);
+            push();
+            tint(255, 180);
+			image(images.highlight, 172, 101, 131, 131);
+            pop();
 			if (shared.tableTask && shared.plantTask === false) {
-				image(images.tableHighlight, 81, 435, 307, 307);
+              push();
+              tint(255, 180);
+				image(images.highlight, 81, 435, 307, 307);
+              pop();
 				image(images.checkmark, 200, 505, 70, 80);
 			} else if (shared.plantTask && shared.tableTask === false) {
-				image(images.plantHighlight, 681, 631, 149, 152);
+              push();
+              tint(255, 180);
+				image(images.highlight, 681, 631, 149, 152);
+              pop();
 				image(images.checkmark, 730, 680, 50, 50);			
 			} else if (shared.plantTask && shared.tableTask) {
-				image(images.plantHighlight, 681, 631, 149, 152);
+              push();
+              tint(255, 180);
+				image(images.highlight, 681, 631, 149, 152);
+              pop();
 				image(images.checkmark, 730, 680, 50, 50);
 
-				image(images.tableHighlight, 81, 435, 307, 307);
+              push();
+              tint(255, 180);
+				image(images.highlight, 81, 435, 307, 307);
+              pop();
 				image(images.checkmark, 200, 505, 70, 80);
 			}
 			if (mouseIsPressed) {
@@ -257,18 +285,33 @@ function drawMain() {
 		}
 		// plant
 		if (guest.x > 700 && guest.x < 800 && guest.y > 620 && guest.y < 760 && shared.plantTask === false) {
-			image(images.plantHighlight, 681, 631, 149, 152);
+          push();
+          tint(255, 180);
+			image(images.highlight, 681, 631, 149, 152);
+          pop();
 			if (shared.tableTask && shared.windowTask === false) {
-				image(images.tableHighlight, 81, 435, 307, 307);
+              push();
+              tint(255, 180);
+				image(images.highlight, 81, 435, 307, 307);
+              pop();
 				image(images.checkmark, 200, 505, 70, 80);
 			} else if (shared.windowTask && shared.tableTask === false) {
-				image(images.windowHighlight, 172, 101, 131, 131);
+              push();
+              tint(255, 180);
+				image(images.highlight, 172, 101, 131, 131);
+              pop();
 				image(images.checkmark, 205, 112, 60, 70);
 			} else if (shared.windowTask && shared.tableTask) {
-				image(images.tableHighlight, 81, 435, 307, 307);
+              push();
+              tint(255, 180);
+				image(images.highlight, 81, 435, 307, 307);
+              pop();
 				image(images.checkmark, 200, 505, 70, 80);
 
-				image(images.windowHighlight, 172, 101, 131, 131);
+              push();
+              tint(255, 180);
+				image(images.highlight, 172, 101, 131, 131);
+              pop();
 				image(images.checkmark, 205, 112, 60, 70);
 			}
 			if (mouseIsPressed) {
@@ -279,15 +322,15 @@ function drawMain() {
 
 		// remove hover from completed sections
 		if (shared.windowTask) {
-			image(images.windowHighlight, 172, 101, 131, 131);
+			image(images.highlight, 172, 101, 131, 131);
 			image(images.checkmark, 205, 112, 60, 70);
 		}
 		if (shared.tableTask) {
-			image(images.tableHighlight, 81, 435, 307, 307);
+			image(images.highlight, 81, 435, 307, 307);
 			image(images.checkmark, 200, 505, 70, 80);
 		}
 		if (shared.plantTask) {
-			image(images.plantHighlight, 681, 631, 149, 152);
+			image(images.highlight, 681, 631, 149, 152);
 			image(images.checkmark, 730, 680, 50, 50);
 		}
 	}
@@ -543,7 +586,7 @@ function mouseClicked() {
 			soapShared.locations.push({ x: mouseX, y: mouseY });
 		} else {
 			if (soapShared.locations.find((location) => dist(location.x, location.y, mouseX, mouseY) < 20))
-			{wipeShared.locations.push({ x: mouseX, y: mouseY })};
+			{wipeShared.locations.push({ x: mouseX, y: mouseY })}
 		}
 	}
 
