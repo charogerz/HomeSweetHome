@@ -72,10 +72,10 @@ function preload() {
     images.titleScreen = loadImage("./assets/images/title.gif");
 	images.room = loadImage("./assets/images/room-layout.png");
 	images.cursor = loadImage("./assets/images/cursor.png");
-	images.tableZoom = loadImage("./assets/images/dining-table.png");
-	images.windowZoom = loadImage("./assets/images/window.png");
+	images.tableZoom = loadImage("./assets/images/table-resized.png");
+	images.windowZoom = loadImage("./assets/images/window-resized.png");
 	images.checkmark = loadImage("./assets/images/checkmark.png");
-	images.plantZoom = loadImage("./assets/images/plant.png");
+	images.plantZoom = loadImage("./assets/images/plant-resized.png");
     images.highlight = loadImage("./assets/images/highlight.png");
 }
 
@@ -418,7 +418,7 @@ function drawTableGame() {
 
 	// tabletop with designated goal areas
 	fill("#f2f2f2");
-	rect(120, 145, 569, 480, 20);
+	rect(120, 125, 580, 510, 20);
 	// red goal
 	fill(255, 0, 0, 127);
 	ellipse(redGoalX, redGoalY, radius);
