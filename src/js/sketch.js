@@ -57,7 +57,7 @@ function preload() {
 	guests = partyLoadGuestShareds();
 	my = partyLoadMyShared();
 	shared = partyLoadShared("globals", {
-		gameState: "intro",
+		gameState: "end",
 		windowTask: false,
 		redGoalDone: false,
 		blueGoalDone: false,
@@ -301,9 +301,27 @@ function drawEnd() {
 	textSize(50);
 	text("You did it!", width/2, height/2);
 	text("Congrats, roomies!", width/2, 480);
-	textSize(30);
-	text("Ctrl + R to play again", width/2, 700);
 	pop();
+
+	// play again button
+	push();
+	stroke("#000066");
+	strokeWeight(6);
+	noFill();
+	rect(280, 600, 250, 60, 50);
+	pop();
+	push();
+	textSize(30);
+	text("play again", 400, 638);
+	pop();
+	for (const guest of guests) {
+		if (guest.x > 280 && guest.x < 500 && guest.y > 600 && guest.y < 680 && mouseIsPressed) {
+			shared.windowTask = false;
+			shared.tableTask = false;
+			shared.plantTask = false;
+			shared.gameState = "intro";
+		}
+	}
 }
 
 function drawPlantGame() {
@@ -314,8 +332,8 @@ function drawPlantGame() {
 	fill("#000066");
 	textSize(30);
 	textAlign(LEFT);
-	text("Roommate 1: water the plant", 150, 40);
-	text("Roommate 2: trim branches to prune", 150, 70);
+	text("Roommate 1: click to water the plant", 150, 40);
+	text("Roommate 2: click to prune branches", 150, 70);
 	pop();
 	
 	// dirt
