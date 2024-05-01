@@ -12,7 +12,7 @@ class Rect {
 		this.t = t;
 		this.w = w;
 		this.h = h;
-      this.tx = tx;
+		this.tx = tx;
 	}
 }
 
@@ -64,22 +64,22 @@ function preload() {
 		blueGoalDone: false,
 		tableTask: false,
 		plantTask: false,
-        cupboardTask: false
+		cupboardTask: false
 	});
-	soapShared = partyLoadShared("soap", { locations: []});
-	wipeShared = partyLoadShared("wipe", { locations: []});
+	soapShared = partyLoadShared("soap", { locations: [] });
+	wipeShared = partyLoadShared("wipe", { locations: [] });
 	waterShared = partyLoadShared("water", { locations: [] });
 
 	// loading all images
-    images.titleScreen = loadImage("./assets/images/title.gif");
-	images.room = loadImage("./assets/images/room-layout.png");
+	images.titleScreen = loadImage("./assets/images/title.gif");
+	images.room = loadImage("./assets/images/room.jpg");
 	images.cursor = loadImage("./assets/images/cursor-resized.png");
 	images.tableZoom = loadImage("./assets/images/table-resized.png");
 	images.windowZoom = loadImage("./assets/images/window-resized.png");
 	images.checkmark = loadImage("./assets/images/checkmark.png");
 	images.plantZoom = loadImage("./assets/images/plant-resized.png");
-    images.highlight = loadImage("./assets/images/highlight.png");
-    images.cupboardZoom = loadImage("./assets/images/bookshelf-2.png");
+	images.highlight = loadImage("./assets/images/highlight.png");
+	images.cupboardZoom = loadImage("./assets/images/bookshelf-2.png");
 }
 
 function setup() {
@@ -117,12 +117,12 @@ function setup() {
 		shared.sprites.push(initSprite("b", new Rect(240, 450, 105, 132), "red"));
 		shared.sprites.push(initSprite("c", new Rect(385, 260, 105, 132), "blue"));
 		shared.sprites.push(initSprite("d", new Rect(510, 320, 155, 132), "blue"));
-      
-        shared.cupSprites = [];
-        shared.cupSprites.push(initSprite("t1", new Rect(300, 320, 40, 100, 'top1'), "red"));
-        shared.cupSprites.push(initSprite("t2", new Rect(130, 320, 40, 100, 'top2'), "red"));
-        shared.cupSprites.push(initSprite("b1", new Rect(255, 320, 40, 100, 'bottom1'), "blue"));
-        shared.cupSprites.push(initSprite("b2", new Rect(380, 320, 40, 100, 'bottom2'), "blue"));
+
+		shared.cupSprites = [];
+		shared.cupSprites.push(initSprite("t1", new Rect(300, 320, 40, 100, 'top1'), "red"));
+		shared.cupSprites.push(initSprite("t2", new Rect(130, 320, 40, 100, 'top2'), "red"));
+		shared.cupSprites.push(initSprite("b1", new Rect(255, 320, 40, 100, 'bottom1'), "blue"));
+		shared.cupSprites.push(initSprite("b2", new Rect(380, 320, 40, 100, 'bottom2'), "blue"));
 	}
 
 	partySubscribe("updateSprite", onUpdateSprite);
@@ -139,20 +139,20 @@ function mouseDragged(e) {
 }
 
 function onUpdateSprite({ id, updates }) {
-  if (!partyIsHost()) return;
-  const s = shared.sprites.find((s) => s.id === id);
-  const c = shared.cupSprites.find((s) => s.id === id);
-  if (!s && !c) return;
-  if(s){
-    for (const [k, v] of Object.entries(updates)) {
-      s[k] = v;
-    }
-  }
-  if(c){
-    for (const [k, v] of Object.entries(updates)) {
-      c[k] = v;
-    }
-  }
+	if (!partyIsHost()) return;
+	const s = shared.sprites.find((s) => s.id === id);
+	const c = shared.cupSprites.find((s) => s.id === id);
+	if (!s && !c) return;
+	if (s) {
+		for (const [k, v] of Object.entries(updates)) {
+			s[k] = v;
+		}
+	}
+	if (c) {
+		for (const [k, v] of Object.entries(updates)) {
+			c[k] = v;
+		}
+	}
 
 }
 
@@ -173,8 +173,8 @@ function draw() {
 		drawWindowGame();
 	} else if (shared.gameState === "plant-game") {
 		drawPlantGame();
-    } else if (shared.gameState === "cupboard-game") {
-        drawCupboardGame();
+	} else if (shared.gameState === "cupboard-game") {
+		drawCupboardGame();
 	} else if (shared.gameState === "end") {
 		drawEnd();
 	}
@@ -208,80 +208,80 @@ function drawMain() {
 	fill(98, 98, 166, 120);
 	stroke("#000066");
 	strokeWeight(5);
-	rect(530, 0, 240, 150, 3);
+	rect(440, 0, 350, 95, 3);
 	pop();
 	push();
 	fill("#000066");
 	textSize(20);
 	textAlign(LEFT);
-	text("TO-DO:", 550, 25);
-	text("☐ wipe the window", 550, 50);
-	text("☐ clean the table", 550, 80);
-	text("☐ care for the plant", 550, 110);
-    text("☐ clean the cupboard", 550, 140);
+	text("TO-DO:", 450, 25);
+	text("☐ wipe window", 450, 50);
+	text("☐ clear table", 450, 80);
+	text("☐ care for plant", 610, 50);
+	text("☐ clean cupboard", 610, 80);
 	pop();
 	if (shared.windowTask) {
-		image(images.checkmark, 550, 28, 20, 20);
+		image(images.checkmark, 450, 28, 20, 20);
 	}
 	if (shared.tableTask) {
-		image(images.checkmark, 550, 58, 20, 20);
+		image(images.checkmark, 450, 58, 20, 20);
 	}
 	if (shared.plantTask) {
-		image(images.checkmark, 550, 88, 20, 20);
+		image(images.checkmark, 610, 28, 20, 20);
 	}
-    if (shared.cupboardTask) {
-        image(images.checkmark, 550, 118, 20, 20);
-    }
+	if (shared.cupboardTask) {
+		image(images.checkmark, 610, 58, 20, 20);
+	}
 
 	// hovers
 	for (const guest of guests) {
 		// table
 		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700 && shared.tableTask === false) {
-          push();
-          tint(255, 180);
+			push();
+			tint(255, 180);
 			image(images.highlight, 81, 435, 307, 307);
-          pop();
+			pop();
 			if (mouseIsPressed) {
 				shared.gameState = "table-game";
 			}
 		}
 		// window
 		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === false) {
-            push();
-            tint(255, 180);
-			image(images.highlight, 172, 101, 131, 131);
-            pop();
+			push();
+			tint(255, 180);
+			image(images.highlight, 175, 80, 131, 131);
+			pop();
 			if (mouseIsPressed) {
 				shared.gameState = "window-game";
 			}
 		}
 		// plant
 		if (guest.x > 700 && guest.x < 800 && guest.y > 620 && guest.y < 760 && shared.plantTask === false) {
-          push();
-          tint(255, 180);
+			push();
+			tint(255, 180);
 			image(images.highlight, 681, 631, 149, 152);
-          pop();
+			pop();
 			if (mouseIsPressed) {
 				shared.gameState = "plant-game";
 			}
 		}
-      
-        // cupboard
-        if (guest.x > 0 && guest.x < 165 && guest.y > 165 && guest.y < 315 && shared.cupboardTask === false) {
-          push();
-          tint(255, 180);
-          image(images.highlight, -30, 115, 230, 230);
-          pop();
-          if (mouseIsPressed) {
-            shared.gameState = "cupboard-game";
-          }
-        }
+
+		// cupboard
+		if (guest.x > 0 && guest.x < 165 && guest.y > 165 && guest.y < 315 && shared.cupboardTask === false) {
+			push();
+			tint(255, 180);
+			image(images.highlight, -30, 115, 230, 230);
+			pop();
+			if (mouseIsPressed) {
+				shared.gameState = "cupboard-game";
+			}
+		}
 
 		// remove hover from completed sections
 		if (shared.windowTask) {
 			push();
 			tint(255, 180);
-			image(images.highlight, 172, 101, 131, 131);
+			image(images.highlight, 175, 80, 131, 131);
 			pop();
 			image(images.checkmark, 205, 112, 60, 70);
 		}
@@ -299,13 +299,13 @@ function drawMain() {
 			pop();
 			image(images.checkmark, 730, 680, 50, 50);
 		}
-        if (shared.cupboardTask) {
-          push();
-          tint(255, 180);
-          image(images.highlight, -30, 115, 230, 230);
-          pop();
-          image(images.checkmark, 50, 205, 80, 80);
-        }
+		if (shared.cupboardTask) {
+			push();
+			tint(255, 180);
+			image(images.highlight, -30, 115, 230, 230);
+			pop();
+			image(images.checkmark, 50, 205, 80, 80);
+		}
 	}
 }
 
@@ -315,8 +315,8 @@ function drawEnd() {
 	image(images.checkmark, 350, 100, 150, 180);
 	fill("#000066");
 	textSize(50);
-	text("You did it!", width/2, height/2);
-	text("Congrats, roomies!", width/2, 480);
+	text("You did it!", width / 2, height / 2);
+	text("Congrats, roomies!", width / 2, 480);
 	pop();
 
 	// play again button
@@ -334,12 +334,12 @@ function drawEnd() {
 		if (guest.x > 280 && guest.x < 500 && guest.y > 600 && guest.y < 680 && mouseIsPressed) {
 			shared.windowTask = false;
 			shared.tableTask = false;
-            shared.redGoalDone = false;
-		    shared.blueGoalDone = false;
+			shared.redGoalDone = false;
+			shared.blueGoalDone = false;
 			shared.plantTask = false;
-            shared.cupboardTask = false;
+			shared.cupboardTask = false;
 			shared.gameState = "intro";
-            setup();
+			setup();
 		}
 	}
 }
@@ -352,12 +352,12 @@ function drawPlantGame() {
 	noFill();
 	stroke("#000066");
 	strokeWeight(5);
-	rect(20, 750, 150, 40, 20);
+	rect(20, 20, 150, 40, 20);
 	pop();
 	textSize(25);
-	text("<<< back", 90, 780);
+	text("<<< back", 90, 50);
 	for (const guest of guests) {
-		if (guest.x > 20 && guest.x < 170 && guest.y > 750 && guest.y < 800 && mouseIsPressed) {
+		if (guest.x > 20 && guest.x < 170 && guest.y > 0 && guest.y < 80 && mouseIsPressed) {
 			shared.gameState = "main";
 		}
 	}
@@ -367,13 +367,13 @@ function drawPlantGame() {
 	fill("#000066");
 	textSize(30);
 	textAlign(LEFT);
-	text("Roommate 1: click to water the plant", 150, 40);
-	text("Roommate 2: click to prune branches", 150, 70);
+	text("Roommate 1: click to water the plant", 185, 45);
+	text("Roommate 2: click to prune branches", 185, 75);
 	pop();
-	
+
 	// dirt
 	image(gPlant, 0, 0);
-	
+
 	// plant
 	images.plantZoom.resize(450, 670);
 	image(images.plantZoom, 200, 90);
@@ -397,12 +397,12 @@ function drawTableGame() {
 	noFill();
 	stroke("#000066");
 	strokeWeight(5);
-	rect(20, 750, 150, 40, 20);
+	rect(20, 20, 150, 40, 20);
 	pop();
 	textSize(25);
-	text("<<< back", 90, 780);
+	text("<<< back", 90, 50);
 	for (const guest of guests) {
-		if (guest.x > 20 && guest.x < 170 && guest.y > 750 && guest.y < 800 && mouseIsPressed) {
+		if (guest.x > 20 && guest.x < 170 && guest.y > 0 && guest.y < 80 && mouseIsPressed) {
 			shared.gameState = "main";
 		}
 	}
@@ -410,8 +410,8 @@ function drawTableGame() {
 	// instructions
 	fill("#000066");
 	textSize(30);
-	text("Roommate 1: sort the red items", 400, 50);
-	text("Roommate 2: sort the blue items", 405, 80);
+	text("Roommate 1: sort the red items", 430, 40);
+	text("Roommate 2: sort the blue items", 435, 70);
 
 
 	// tabletop with designated goal areas
@@ -449,7 +449,7 @@ function checkTableItems() {
 	blue1Y = shared.sprites[2].rect.t;
 	blue2X = shared.sprites[3].rect.l;
 	blue2Y = shared.sprites[3].rect.t;
-	
+
 	if (dist(red1X, red1Y, redGoalX, redGoalY) < 110 && dist(red2X, red2Y, redGoalX, redGoalY) < 110) {
 		shared.redGoalDone = true;
 	}
@@ -459,67 +459,85 @@ function checkTableItems() {
 }
 
 function drawCupboardGame() {
-  background("#f2f2f2");
-  images.cupboardZoom.resize(width, height - 100);
-  image(images.cupboardZoom, 0, 90);
-  noStroke();
+	background("#f2f2f2");
+	images.cupboardZoom.resize(width, height - 100);
+	image(images.cupboardZoom, 0, 90);
+	noStroke();
 
-  // instructions
-  fill("#000066");
-  textSize(30);
-  text("Roommate 1: sort the top items", 400, 50);
-  text("Roommate 2: sort the bottom items", 405, 80);
-    // 83 308
-  shared.cupSprites.forEach(stepSprite);
-  shared.cupSprites.forEach(drawSprite);
-  
-  let finishFlag = true;
-  for(let i = 0; i < shared.cupSprites.length; i++){
-     if(shared.cupSprites[i].rect.l < 90 || shared.cupSprites[i].rect.l > 725){
-       finishFlag = false;
-       break;
-     }
-    
-    if(shared.cupSprites[i].id === 't1' || shared.cupSprites[i].id === 't2'){
-      if(shared.cupSprites[i].rect.t < 300 ||  shared.cupSprites[i].rect.t + 80 > 440){
-        finishFlag = false;
-        break;
-      }
-    }
-    if(shared.cupSprites[i].id === 'b1' || shared.cupSprites[i].id === 'b2'){
-       if(shared.cupSprites[i].rect.t < 530 ||  shared.cupSprites[i].rect.t + 80 > 650){
-        finishFlag = false;
-        break;
-      }
-     }
-  }
-  
-  if(shared.cupSprites[0].rect.l > shared.cupSprites[1].rect.l ||     shared.cupSprites[2].rect.l > shared.cupSprites[3].rect.l){
-    finishFlag = false;
-  }
+	// back button 
+	push();
+	noFill();
+	stroke("#000066");
+	strokeWeight(5);
+	rect(20, 20, 150, 40, 20);
+	pop();
+	textSize(25);
+	text("<<< back", 90, 50);
+	for (const guest of guests) {
+		if (guest.x > 20 && guest.x < 170 && guest.y > 0 && guest.y < 80 && mouseIsPressed) {
+			shared.gameState = "main";
+		}
+	}
 
-  if (finishFlag) {
-    shared.cupboardTask = true;
-    shared.gameState = "main";
-  }
+	// instructions
+	fill("#000066");
+	push();
+	textSize(30);
+	textAlign(LEFT);
+	text("Roommate 1: sort the top items", 200, 50);
+	text("Roommate 2: sort the bottom items", 200, 80);
+	pop();
+
+	shared.cupSprites.forEach(stepSprite);
+	shared.cupSprites.forEach(drawSprite);
+
+	let finishFlag = true;
+	for (let i = 0; i < shared.cupSprites.length; i++) {
+		if (shared.cupSprites[i].rect.l < 90 || shared.cupSprites[i].rect.l > 725) {
+			finishFlag = false;
+			break;
+		}
+
+		if (shared.cupSprites[i].id === 't1' || shared.cupSprites[i].id === 't2') {
+			if (shared.cupSprites[i].rect.t < 300 || shared.cupSprites[i].rect.t + 80 > 440) {
+				finishFlag = false;
+				break;
+			}
+		}
+		if (shared.cupSprites[i].id === 'b1' || shared.cupSprites[i].id === 'b2') {
+			if (shared.cupSprites[i].rect.t < 530 || shared.cupSprites[i].rect.t + 80 > 650) {
+				finishFlag = false;
+				break;
+			}
+		}
+	}
+
+	if (shared.cupSprites[0].rect.l > shared.cupSprites[1].rect.l || shared.cupSprites[2].rect.l > shared.cupSprites[3].rect.l) {
+		finishFlag = false;
+	}
+
+	if (finishFlag) {
+		shared.cupboardTask = true;
+		shared.gameState = "main";
+	}
 }
 
 function mousePressed() {
 	for (const s of shared.sprites.slice().reverse()) {
 		if (mousePressedSprite(s)) break;
 	}
-  for (const s of shared.cupSprites.slice().reverse()) {
-    if (mousePressedSprite(s)) break;
-  }
+	for (const s of shared.cupSprites.slice().reverse()) {
+		if (mousePressedSprite(s)) break;
+	}
 }
 
 function mouseReleased() {
 	for (const s of shared.sprites.slice().reverse()) {
 		if (mouseReleasedSprite(s)) break;
 	}
-    for (const s of shared.cupSprites.slice().reverse()) {
-    if (mouseReleasedSprite(s)) break;
-  }
+	for (const s of shared.cupSprites.slice().reverse()) {
+		if (mouseReleasedSprite(s)) break;
+	}
 }
 
 function initSprite(id, rect = new Rect(), color = "red") {
@@ -532,19 +550,19 @@ function initSprite(id, rect = new Rect(), color = "red") {
 
 function drawSprite(s) {
 	push();
-  fill(s.color);
-  noStroke();
-  rect(s.rect.l, s.rect.t, s.rect.w, s.rect.h);
-  if(s.rect.tx){
-    fill(200)
-    textSize(14);
-    const t = s.rect.tx.split("")
-    for(let i = 0; i < t.length; i++){
-      text(t[i], s.rect.l + 20, s.rect.t + 12 + i * 13)  
-    }
-    
-  }
-  pop();
+	fill(s.color);
+	noStroke();
+	rect(s.rect.l, s.rect.t, s.rect.w, s.rect.h);
+	if (s.rect.tx) {
+		fill(200)
+		textSize(14);
+		const t = s.rect.tx.split("")
+		for (let i = 0; i < t.length; i++) {
+			text(t[i], s.rect.l + 20, s.rect.t + 12 + i * 13)
+		}
+
+	}
+	pop();
 }
 
 function stepSprite(s) {
@@ -555,7 +573,7 @@ function stepSprite(s) {
 			mouseY + s.dragOffset.y,
 			s.rect.w,
 			s.rect.h,
-          s.rect.tx
+			s.rect.tx
 		);
 
 		// update
@@ -602,12 +620,12 @@ function drawWindowGame() {
 	noFill();
 	stroke("#000066");
 	strokeWeight(5);
-	rect(20, 750, 150, 40, 20);
+	rect(20, 20, 150, 40, 20);
 	pop();
 	textSize(25);
-	text("<<< back", 90, 780);
+	text("<<< back", 90, 50);
 	for (const guest of guests) {
-		if (guest.x > 20 && guest.x < 170 && guest.y > 750 && guest.y < 800 && mouseIsPressed) {
+		if (guest.x > 20 && guest.x < 170 && guest.y > 0 && guest.y < 80 && mouseIsPressed) {
 			shared.gameState = "main";
 		}
 	}
@@ -615,9 +633,9 @@ function drawWindowGame() {
 	// instructions
 	fill("#000066");
 	textSize(30);
-	text("Roommate 1: click to add soap", 350, 60);
-	text("Roommate 2: click to wipe away", 360, 90);
-	text("dirt behind soap", 448, 120);
+	text("Roommate 1: click to add soap", 440, 60);
+	text("Roommate 2: click to wipe away", 450, 90);
+	text("dirt behind soap", 538, 120);
 
 	// wipe away with erase
 	gWindow.push();
@@ -633,7 +651,7 @@ function drawWindowGame() {
 	gWindow.loadPixels();
 	for (let i = 3; i < gWindow.pixels.length; i += 4) {
 		if (gWindow.pixels[i] === 0) {
-     		cleanPixels++;
+			cleanPixels++;
 		}
 	}
 	gWindow.updatePixels();
@@ -669,15 +687,14 @@ function mouseClicked() {
 		if (partyIsHost()) {
 			soapShared.locations.push({ x: mouseX, y: mouseY });
 		} else {
-			if (soapShared.locations.find((location) => dist(location.x, location.y, mouseX, mouseY) < 20))
-			{wipeShared.locations.push({ x: mouseX, y: mouseY })}
+			if (soapShared.locations.find((location) => dist(location.x, location.y, mouseX, mouseY) < 20)) { wipeShared.locations.push({ x: mouseX, y: mouseY }) }
 		}
 	}
 
 	// plant watering functions
-	if(shared.gameState === "plant-game") {
+	if (shared.gameState === "plant-game") {
 		if (partyIsHost()) {
-			waterShared.locations.push({ x:mouseX, y: mouseY });
+			waterShared.locations.push({ x: mouseX, y: mouseY });
 			if (waterShared.locations.length >= 15) {
 				shared.plantTask = true;
 				shared.gameState = "main";
