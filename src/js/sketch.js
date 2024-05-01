@@ -7,11 +7,12 @@
 // https://p5party.org/examples/drag_fix_3/
 
 class Rect {
-	constructor(l = 0, t = 0, w = 0, h = 0) {
+	constructor(l = 0, t = 0, w = 0, h = 0, tx = "") {
 		this.l = l;
 		this.t = t;
 		this.w = w;
 		this.h = h;
+      this.tx = tx;
 	}
 }
 
@@ -62,7 +63,8 @@ function preload() {
 		redGoalDone: false,
 		blueGoalDone: false,
 		tableTask: false,
-		plantTask: false
+		plantTask: false,
+        cupboardTask: false
 	});
 	soapShared = partyLoadShared("soap", { locations: []});
 	wipeShared = partyLoadShared("wipe", { locations: []});
@@ -77,6 +79,7 @@ function preload() {
 	images.checkmark = loadImage("./assets/images/checkmark.png");
 	images.plantZoom = loadImage("./assets/images/plant-resized.png");
     images.highlight = loadImage("./assets/images/highlight.png");
+    images.cupboardZoom = loadImage("./assets/images/bookshelf-2.png");
 }
 
 function setup() {
@@ -107,13 +110,19 @@ function setup() {
 	gPlant.rect(350, 500, 160, 85, 24);
 	gPlant.rect(365, 410, 80, 100, 18);
 
-	// initializing rects on table
+	// initializing rects on table and cupboard respectively
 	if (partyIsHost()) {
 		shared.sprites = [];
 		shared.sprites.push(initSprite("a", new Rect(200, 160, 162, 125), "red"));
 		shared.sprites.push(initSprite("b", new Rect(240, 450, 105, 132), "red"));
 		shared.sprites.push(initSprite("c", new Rect(385, 260, 105, 132), "blue"));
 		shared.sprites.push(initSprite("d", new Rect(510, 320, 155, 132), "blue"));
+      
+        shared.cupSprites = [];
+        shared.cupSprites.push(initSprite("t1", new Rect(300, 320, 40, 100, 'top1'), "red"));
+        shared.cupSprites.push(initSprite("t2", new Rect(130, 320, 40, 100, 'top2'), "red"));
+        shared.cupSprites.push(initSprite("b1", new Rect(255, 320, 40, 100, 'bottom1'), "blue"));
+        shared.cupSprites.push(initSprite("b2", new Rect(380, 320, 40, 100, 'bottom2'), "blue"));
 	}
 
 	partySubscribe("updateSprite", onUpdateSprite);
@@ -130,12 +139,21 @@ function mouseDragged(e) {
 }
 
 function onUpdateSprite({ id, updates }) {
-	if (!partyIsHost()) return;
-	const s = shared.sprites.find((s) => s.id === id);
-	if (!s) return;
-	for (const [k, v] of Object.entries(updates)) {
-		s[k] = v;
-	}
+  if (!partyIsHost()) return;
+  const s = shared.sprites.find((s) => s.id === id);
+  const c = shared.cupSprites.find((s) => s.id === id);
+  if (!s && !c) return;
+  if(s){
+    for (const [k, v] of Object.entries(updates)) {
+      s[k] = v;
+    }
+  }
+  if(c){
+    for (const [k, v] of Object.entries(updates)) {
+      c[k] = v;
+    }
+  }
+
 }
 
 function draw() {
@@ -155,6 +173,8 @@ function draw() {
 		drawWindowGame();
 	} else if (shared.gameState === "plant-game") {
 		drawPlantGame();
+    } else if (shared.gameState === "cupboard-game") {
+        drawCupboardGame();
 	} else if (shared.gameState === "end") {
 		drawEnd();
 	}
@@ -188,26 +208,30 @@ function drawMain() {
 	fill(98, 98, 166, 120);
 	stroke("#000066");
 	strokeWeight(5);
-	rect(530, 0, 230, 135, 3);
+	rect(530, 0, 240, 150, 3);
 	pop();
 	push();
 	fill("#000066");
 	textSize(20);
 	textAlign(LEFT);
-	text("TO-DO:", 550, 30);
-	text("- wipe the window", 550, 60);
-	text("- clean the table", 550, 90);
-	text("- care for the plant", 550, 120);
+	text("TO-DO:", 550, 25);
+	text("☐ wipe the window", 550, 50);
+	text("☐ clean the table", 550, 80);
+	text("☐ care for the plant", 550, 110);
+    text("☐ clean the cupboard", 550, 140);
 	pop();
 	if (shared.windowTask) {
-		image(images.checkmark, 550, 38, 20, 20);
+		image(images.checkmark, 550, 28, 20, 20);
 	}
 	if (shared.tableTask) {
-		image(images.checkmark, 550, 68, 20, 20);
+		image(images.checkmark, 550, 58, 20, 20);
 	}
 	if (shared.plantTask) {
-		image(images.checkmark, 550, 98, 20, 20);
+		image(images.checkmark, 550, 88, 20, 20);
 	}
+    if (shared.cupboardTask) {
+        image(images.checkmark, 550, 118, 20, 20);
+    }
 
 	// hovers
 	for (const guest of guests) {
@@ -217,35 +241,9 @@ function drawMain() {
           tint(255, 180);
 			image(images.highlight, 81, 435, 307, 307);
           pop();
-			if (shared.windowTask && shared.plantTask === false) {
-              push();
-              tint(255, 180);
-				image(images.highlight, 172, 101, 131, 131);
-              pop();
-				image(images.checkmark, 205, 112, 60, 70);
-			} else if (shared.plantTask && shared.windowTask === false) {
-                push();
-              tint(255, 180);
-				image(images.highlight, 681, 631, 149, 152);
-              pop();
-				image(images.checkmark, 730, 680, 50, 50);
-			} else if (shared.plantTask && shared.windowTask) {
-              push();
-              tint(255, 180);
-				image(images.highlight, 681, 631, 149, 152);
-              pop();
-				image(images.checkmark, 730, 680, 50, 50);
-
-              push();
-              tint(255, 180);
-				image(images.highlight, 172, 101, 131, 131);
-              pop();
-				image(images.checkmark, 205, 112, 60, 70);
-			}
 			if (mouseIsPressed) {
 				shared.gameState = "table-game";
 			}
-			return;
 		}
 		// window
 		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === false) {
@@ -253,35 +251,9 @@ function drawMain() {
             tint(255, 180);
 			image(images.highlight, 172, 101, 131, 131);
             pop();
-			if (shared.tableTask && shared.plantTask === false) {
-              push();
-              tint(255, 180);
-				image(images.highlight, 81, 435, 307, 307);
-              pop();
-				image(images.checkmark, 200, 505, 70, 80);
-			} else if (shared.plantTask && shared.tableTask === false) {
-              push();
-              tint(255, 180);
-				image(images.highlight, 681, 631, 149, 152);
-              pop();
-				image(images.checkmark, 730, 680, 50, 50);			
-			} else if (shared.plantTask && shared.tableTask) {
-              push();
-              tint(255, 180);
-				image(images.highlight, 681, 631, 149, 152);
-              pop();
-				image(images.checkmark, 730, 680, 50, 50);
-
-              push();
-              tint(255, 180);
-				image(images.highlight, 81, 435, 307, 307);
-              pop();
-				image(images.checkmark, 200, 505, 70, 80);
-			}
 			if (mouseIsPressed) {
 				shared.gameState = "window-game";
 			}
-			return;
 		}
 		// plant
 		if (guest.x > 700 && guest.x < 800 && guest.y > 620 && guest.y < 760 && shared.plantTask === false) {
@@ -289,36 +261,21 @@ function drawMain() {
           tint(255, 180);
 			image(images.highlight, 681, 631, 149, 152);
           pop();
-			if (shared.tableTask && shared.windowTask === false) {
-              push();
-              tint(255, 180);
-				image(images.highlight, 81, 435, 307, 307);
-              pop();
-				image(images.checkmark, 200, 505, 70, 80);
-			} else if (shared.windowTask && shared.tableTask === false) {
-              push();
-              tint(255, 180);
-				image(images.highlight, 172, 101, 131, 131);
-              pop();
-				image(images.checkmark, 205, 112, 60, 70);
-			} else if (shared.windowTask && shared.tableTask) {
-              push();
-              tint(255, 180);
-				image(images.highlight, 81, 435, 307, 307);
-              pop();
-				image(images.checkmark, 200, 505, 70, 80);
-
-              push();
-              tint(255, 180);
-				image(images.highlight, 172, 101, 131, 131);
-              pop();
-				image(images.checkmark, 205, 112, 60, 70);
-			}
 			if (mouseIsPressed) {
 				shared.gameState = "plant-game";
 			}
-			return;
 		}
+      
+        // cupboard
+        if (guest.x > 0 && guest.x < 165 && guest.y > 165 && guest.y < 315 && shared.cupboardTask === false) {
+          push();
+          tint(255, 180);
+          image(images.highlight, -30, 115, 230, 230);
+          pop();
+          if (mouseIsPressed) {
+            shared.gameState = "cupboard-game";
+          }
+        }
 
 		// remove hover from completed sections
 		if (shared.windowTask) {
@@ -342,6 +299,13 @@ function drawMain() {
 			pop();
 			image(images.checkmark, 730, 680, 50, 50);
 		}
+        if (shared.cupboardTask) {
+          push();
+          tint(255, 180);
+          image(images.highlight, -30, 115, 230, 230);
+          pop();
+          image(images.checkmark, 50, 205, 80, 80);
+        }
 	}
 }
 
@@ -370,8 +334,12 @@ function drawEnd() {
 		if (guest.x > 280 && guest.x < 500 && guest.y > 600 && guest.y < 680 && mouseIsPressed) {
 			shared.windowTask = false;
 			shared.tableTask = false;
+            shared.redGoalDone = false;
+		    shared.blueGoalDone = false;
 			shared.plantTask = false;
+            shared.cupboardTask = false;
 			shared.gameState = "intro";
+            setup();
 		}
 	}
 }
@@ -490,16 +458,68 @@ function checkTableItems() {
 	}
 }
 
+function drawCupboardGame() {
+  background("#f2f2f2");
+  images.cupboardZoom.resize(width, height - 100);
+  image(images.cupboardZoom, 0, 90);
+  noStroke();
+
+  // instructions
+  fill("#000066");
+  textSize(30);
+  text("Roommate 1: sort the top items", 400, 50);
+  text("Roommate 2: sort the bottom items", 405, 80);
+    // 83 308
+  shared.cupSprites.forEach(stepSprite);
+  shared.cupSprites.forEach(drawSprite);
+  
+  let finishFlag = true;
+  for(let i = 0; i < shared.cupSprites.length; i++){
+     if(shared.cupSprites[i].rect.l < 90 || shared.cupSprites[i].rect.l > 725){
+       finishFlag = false;
+       break;
+     }
+    
+    if(shared.cupSprites[i].id === 't1' || shared.cupSprites[i].id === 't2'){
+      if(shared.cupSprites[i].rect.t < 300 ||  shared.cupSprites[i].rect.t + 80 > 440){
+        finishFlag = false;
+        break;
+      }
+    }
+    if(shared.cupSprites[i].id === 'b1' || shared.cupSprites[i].id === 'b2'){
+       if(shared.cupSprites[i].rect.t < 530 ||  shared.cupSprites[i].rect.t + 80 > 650){
+        finishFlag = false;
+        break;
+      }
+     }
+  }
+  
+  if(shared.cupSprites[0].rect.l > shared.cupSprites[1].rect.l ||     shared.cupSprites[2].rect.l > shared.cupSprites[3].rect.l){
+    finishFlag = false;
+  }
+
+  if (finishFlag) {
+    shared.cupboardTask = true;
+    shared.gameState = "main";
+  }
+}
+
 function mousePressed() {
 	for (const s of shared.sprites.slice().reverse()) {
 		if (mousePressedSprite(s)) break;
 	}
+  for (const s of shared.cupSprites.slice().reverse()) {
+    if (mousePressedSprite(s)) break;
+  }
 }
 
 function mouseReleased() {
 	for (const s of shared.sprites.slice().reverse()) {
 		if (mouseReleasedSprite(s)) break;
 	}
+    for (const s of shared.cupSprites.slice().reverse()) {
+    if (mouseReleasedSprite(s)) break;
+  }
 }
 
 function initSprite(id, rect = new Rect(), color = "red") {
@@ -512,10 +532,19 @@ function initSprite(id, rect = new Rect(), color = "red") {
 
 function drawSprite(s) {
 	push();
-	fill(s.color);
-	noStroke();
-	rect(s.rect.l, s.rect.t, s.rect.w, s.rect.h);
-	pop();
+  fill(s.color);
+  noStroke();
+  rect(s.rect.l, s.rect.t, s.rect.w, s.rect.h);
+  if(s.rect.tx){
+    fill(200)
+    textSize(14);
+    const t = s.rect.tx.split("")
+    for(let i = 0; i < t.length; i++){
+      text(t[i], s.rect.l + 20, s.rect.t + 12 + i * 13)  
+    }
+    
+  }
+  pop();
 }
 
 function stepSprite(s) {
@@ -525,7 +554,8 @@ function stepSprite(s) {
 			mouseX + s.dragOffset.x,
 			mouseY + s.dragOffset.y,
 			s.rect.w,
-			s.rect.h
+			s.rect.h,
+          s.rect.tx
 		);
 
 		// update
