@@ -171,7 +171,7 @@ function draw() {
 
 	// draw player cursors
 	for (const guest of guests) {
-		image(images.cursor, guest.x, guest.y);
+		image(images.cursor, guest.x, guest.y, 30, 30);
 	}
 }
 
@@ -322,15 +322,24 @@ function drawMain() {
 
 		// remove hover from completed sections
 		if (shared.windowTask) {
+			push();
+			tint(255, 180);
 			image(images.highlight, 172, 101, 131, 131);
+			pop();
 			image(images.checkmark, 205, 112, 60, 70);
 		}
 		if (shared.tableTask) {
+			push();
+			tint(255, 180);
 			image(images.highlight, 81, 435, 307, 307);
+			pop();
 			image(images.checkmark, 200, 505, 70, 80);
 		}
 		if (shared.plantTask) {
+			push();
+			tint(255, 180);
 			image(images.highlight, 681, 631, 149, 152);
+			pop();
 			image(images.checkmark, 730, 680, 50, 50);
 		}
 	}
