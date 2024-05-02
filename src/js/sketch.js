@@ -3,8 +3,11 @@
 // Work with your "roommate" to check off the to-do list items and tidy the room!
 // Cooperative cozy game for two players, using only the mouse to point, click, and drag items
 
-// Using code snippets from p5party's drag_fix_3 
+// Using code snippets from p5party's drag_fix_3
 // https://p5party.org/examples/drag_fix_3/
+
+// silly playlist for shine day and happy mood
+// https://www.youtube.com/watch?v=WLaUUB80MeQ
 
 class Rect {
 	constructor(l = 0, t = 0, w = 0, h = 0, tx = "") {
@@ -64,7 +67,7 @@ function preload() {
 		blueGoalDone: false,
 		tableTask: false,
 		plantTask: false,
-		cupboardTask: false
+		cupboardTask: false,
 	});
 	soapShared = partyLoadShared("soap", { locations: [] });
 	wipeShared = partyLoadShared("wipe", { locations: [] });
@@ -119,10 +122,18 @@ function setup() {
 		shared.sprites.push(initSprite("d", new Rect(510, 320, 155, 132), "blue"));
 
 		shared.cupSprites = [];
-		shared.cupSprites.push(initSprite("t1", new Rect(300, 320, 40, 100, 'top1'), "red"));
-		shared.cupSprites.push(initSprite("t2", new Rect(130, 320, 40, 100, 'top2'), "red"));
-		shared.cupSprites.push(initSprite("b1", new Rect(255, 320, 40, 100, 'bottom1'), "blue"));
-		shared.cupSprites.push(initSprite("b2", new Rect(380, 320, 40, 100, 'bottom2'), "blue"));
+		shared.cupSprites.push(
+			initSprite("t1", new Rect(300, 320, 40, 100, "top1"), "red")
+		);
+		shared.cupSprites.push(
+			initSprite("t2", new Rect(130, 320, 40, 100, "top2"), "red")
+		);
+		shared.cupSprites.push(
+			initSprite("b1", new Rect(255, 320, 40, 100, "bottom1"), "blue")
+		);
+		shared.cupSprites.push(
+			initSprite("b2", new Rect(380, 320, 40, 100, "bottom2"), "blue")
+		);
 	}
 
 	partySubscribe("updateSprite", onUpdateSprite);
@@ -153,7 +164,6 @@ function onUpdateSprite({ id, updates }) {
 			c[k] = v;
 		}
 	}
-
 }
 
 function draw() {
@@ -236,7 +246,13 @@ function drawMain() {
 	// hovers
 	for (const guest of guests) {
 		// table
-		if (guest.x > 80 && guest.x < 400 && guest.y > 435 && guest.y < 700 && shared.tableTask === false) {
+		if (
+			guest.x > 80 &&
+			guest.x < 400 &&
+			guest.y > 435 &&
+			guest.y < 700 &&
+			shared.tableTask === false
+		) {
 			push();
 			tint(255, 180);
 			image(images.highlight, 81, 435, 307, 307);
@@ -246,7 +262,13 @@ function drawMain() {
 			}
 		}
 		// window
-		if (guest.x > 170 && guest.x < 300 && guest.y > 120 && guest.y < 200 && shared.windowTask === false) {
+		if (
+			guest.x > 170 &&
+			guest.x < 300 &&
+			guest.y > 120 &&
+			guest.y < 200 &&
+			shared.windowTask === false
+		) {
 			push();
 			tint(255, 180);
 			image(images.highlight, 175, 80, 131, 131);
@@ -256,7 +278,13 @@ function drawMain() {
 			}
 		}
 		// plant
-		if (guest.x > 700 && guest.x < 800 && guest.y > 620 && guest.y < 760 && shared.plantTask === false) {
+		if (
+			guest.x > 700 &&
+			guest.x < 800 &&
+			guest.y > 620 &&
+			guest.y < 760 &&
+			shared.plantTask === false
+		) {
 			push();
 			tint(255, 180);
 			image(images.highlight, 681, 631, 149, 152);
@@ -267,7 +295,13 @@ function drawMain() {
 		}
 
 		// cupboard
-		if (guest.x > 0 && guest.x < 165 && guest.y > 165 && guest.y < 315 && shared.cupboardTask === false) {
+		if (
+			guest.x > 0 &&
+			guest.x < 165 &&
+			guest.y > 165 &&
+			guest.y < 315 &&
+			shared.cupboardTask === false
+		) {
 			push();
 			tint(255, 180);
 			image(images.highlight, -30, 115, 230, 230);
@@ -331,7 +365,13 @@ function drawEnd() {
 	text("play again", 400, 638);
 	pop();
 	for (const guest of guests) {
-		if (guest.x > 280 && guest.x < 500 && guest.y > 600 && guest.y < 680 && mouseIsPressed) {
+		if (
+			guest.x > 280 &&
+			guest.x < 500 &&
+			guest.y > 600 &&
+			guest.y < 680 &&
+			mouseIsPressed
+		) {
 			shared.windowTask = false;
 			shared.tableTask = false;
 			shared.redGoalDone = false;
@@ -347,7 +387,7 @@ function drawEnd() {
 function drawPlantGame() {
 	background("#f2f2f2");
 
-	// back button 
+	// back button
 	push();
 	noFill();
 	stroke("#000066");
@@ -357,7 +397,13 @@ function drawPlantGame() {
 	textSize(25);
 	text("<<< back", 90, 50);
 	for (const guest of guests) {
-		if (guest.x > 20 && guest.x < 170 && guest.y > 0 && guest.y < 80 && mouseIsPressed) {
+		if (
+			guest.x > 20 &&
+			guest.x < 170 &&
+			guest.y > 0 &&
+			guest.y < 80 &&
+			mouseIsPressed
+		) {
 			shared.gameState = "main";
 		}
 	}
@@ -392,7 +438,7 @@ function drawTableGame() {
 	image(images.tableZoom, -100, 90);
 	noStroke();
 
-	// back button 
+	// back button
 	push();
 	noFill();
 	stroke("#000066");
@@ -402,7 +448,13 @@ function drawTableGame() {
 	textSize(25);
 	text("<<< back", 90, 50);
 	for (const guest of guests) {
-		if (guest.x > 20 && guest.x < 170 && guest.y > 0 && guest.y < 80 && mouseIsPressed) {
+		if (
+			guest.x > 20 &&
+			guest.x < 170 &&
+			guest.y > 0 &&
+			guest.y < 80 &&
+			mouseIsPressed
+		) {
 			shared.gameState = "main";
 		}
 	}
@@ -413,20 +465,19 @@ function drawTableGame() {
 	text("Roommate 1: sort the red items", 430, 40);
 	text("Roommate 2: sort the blue items", 435, 70);
 
-
 	// tabletop with designated goal areas
 	fill("#f2f2f2");
 	rect(120, 125, 580, 510, 20);
 	// red goal
 	fill(255, 0, 0, 127);
 	ellipse(redGoalX, redGoalY, radius);
-	fill("#000066")
+	fill("#000066");
 	textSize(14);
 	text("red here", 640, 175);
 	// blue goal
 	fill(0, 0, 255, 127);
 	ellipse(blueGoalX, blueGoalY, radius);
-	fill("black")
+	fill("black");
 	textSize(14);
 	text("blue here", 155, 615);
 
@@ -450,10 +501,16 @@ function checkTableItems() {
 	blue2X = shared.sprites[3].rect.l;
 	blue2Y = shared.sprites[3].rect.t;
 
-	if (dist(red1X, red1Y, redGoalX, redGoalY) < 110 && dist(red2X, red2Y, redGoalX, redGoalY) < 110) {
+	if (
+		dist(red1X, red1Y, redGoalX, redGoalY) < 110 &&
+		dist(red2X, red2Y, redGoalX, redGoalY) < 110
+	) {
 		shared.redGoalDone = true;
 	}
-	if (dist(blue1X, blue1Y, blueGoalX, blueGoalY) < 110 && dist(blue2X, blue2Y, blueGoalX, blueGoalY) < 110) {
+	if (
+		dist(blue1X, blue1Y, blueGoalX, blueGoalY) < 110 &&
+		dist(blue2X, blue2Y, blueGoalX, blueGoalY) < 110
+	) {
 		shared.blueGoalDone = true;
 	}
 }
@@ -464,7 +521,7 @@ function drawCupboardGame() {
 	image(images.cupboardZoom, 0, 90);
 	noStroke();
 
-	// back button 
+	// back button
 	push();
 	noFill();
 	stroke("#000066");
@@ -474,7 +531,13 @@ function drawCupboardGame() {
 	textSize(25);
 	text("<<< back", 90, 50);
 	for (const guest of guests) {
-		if (guest.x > 20 && guest.x < 170 && guest.y > 0 && guest.y < 80 && mouseIsPressed) {
+		if (
+			guest.x > 20 &&
+			guest.x < 170 &&
+			guest.y > 0 &&
+			guest.y < 80 &&
+			mouseIsPressed
+		) {
 			shared.gameState = "main";
 		}
 	}
@@ -498,21 +561,30 @@ function drawCupboardGame() {
 			break;
 		}
 
-		if (shared.cupSprites[i].id === 't1' || shared.cupSprites[i].id === 't2') {
-			if (shared.cupSprites[i].rect.t < 300 || shared.cupSprites[i].rect.t + 80 > 440) {
+		if (shared.cupSprites[i].id === "t1" || shared.cupSprites[i].id === "t2") {
+			if (
+				shared.cupSprites[i].rect.t < 300 ||
+				shared.cupSprites[i].rect.t + 80 > 440
+			) {
 				finishFlag = false;
 				break;
 			}
 		}
-		if (shared.cupSprites[i].id === 'b1' || shared.cupSprites[i].id === 'b2') {
-			if (shared.cupSprites[i].rect.t < 530 || shared.cupSprites[i].rect.t + 80 > 650) {
+		if (shared.cupSprites[i].id === "b1" || shared.cupSprites[i].id === "b2") {
+			if (
+				shared.cupSprites[i].rect.t < 530 ||
+				shared.cupSprites[i].rect.t + 80 > 650
+			) {
 				finishFlag = false;
 				break;
 			}
 		}
 	}
 
-	if (shared.cupSprites[0].rect.l > shared.cupSprites[1].rect.l || shared.cupSprites[2].rect.l > shared.cupSprites[3].rect.l) {
+	if (
+		shared.cupSprites[0].rect.l > shared.cupSprites[1].rect.l ||
+		shared.cupSprites[2].rect.l > shared.cupSprites[3].rect.l
+	) {
 		finishFlag = false;
 	}
 
@@ -554,13 +626,12 @@ function drawSprite(s) {
 	noStroke();
 	rect(s.rect.l, s.rect.t, s.rect.w, s.rect.h);
 	if (s.rect.tx) {
-		fill(200)
+		fill(200);
 		textSize(14);
-		const t = s.rect.tx.split("")
+		const t = s.rect.tx.split("");
 		for (let i = 0; i < t.length; i++) {
-			text(t[i], s.rect.l + 20, s.rect.t + 12 + i * 13)
+			text(t[i], s.rect.l + 20, s.rect.t + 12 + i * 13);
 		}
-
 	}
 	pop();
 }
@@ -615,7 +686,7 @@ function mouseReleasedSprite(s) {
 function drawWindowGame() {
 	background("#f2f2f2");
 
-	// back button 
+	// back button
 	push();
 	noFill();
 	stroke("#000066");
@@ -625,7 +696,13 @@ function drawWindowGame() {
 	textSize(25);
 	text("<<< back", 90, 50);
 	for (const guest of guests) {
-		if (guest.x > 20 && guest.x < 170 && guest.y > 0 && guest.y < 80 && mouseIsPressed) {
+		if (
+			guest.x > 20 &&
+			guest.x < 170 &&
+			guest.y > 0 &&
+			guest.y < 80 &&
+			mouseIsPressed
+		) {
 			shared.gameState = "main";
 		}
 	}
@@ -687,7 +764,13 @@ function mouseClicked() {
 		if (partyIsHost()) {
 			soapShared.locations.push({ x: mouseX, y: mouseY });
 		} else {
-			if (soapShared.locations.find((location) => dist(location.x, location.y, mouseX, mouseY) < 20)) { wipeShared.locations.push({ x: mouseX, y: mouseY }) }
+			if (
+				soapShared.locations.find(
+					(location) => dist(location.x, location.y, mouseX, mouseY) < 20
+				)
+			) {
+				wipeShared.locations.push({ x: mouseX, y: mouseY });
+			}
 		}
 	}
 
