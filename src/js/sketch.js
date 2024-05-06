@@ -79,7 +79,7 @@ function preload() {
 	images.cursor = loadImage("./assets/images/cursor-resized.png");
 	images.tableZoom = loadImage("./assets/images/table-resized.png");
 	images.windowZoom = loadImage("./assets/images/window-resized.png");
-	images.checkmark = loadImage("./assets/images/checkmark.png");
+	images.checkmark = loadImage("./assets/images/heavy-check-mark.png");
 	images.plantZoom = loadImage("./assets/images/plant-resized.png");
 	images.highlight = loadImage("./assets/images/highlight.png");
 	images.cupboardZoom = loadImage("./assets/images/bookshelf-2.png");
