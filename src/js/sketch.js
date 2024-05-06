@@ -399,6 +399,12 @@ function drawEnd() {
 			shared.blueGoalDone = false;
 			shared.plantTask = false;
 			shared.cupboardTask = false;
+			cleanPixels = 0;
+			percentCleaned = 0;
+			soapShared.locations = [];
+			wipeShared.locations = [];
+			waterShared.locations = [];
+			trimShared.locations = [];
 			shared.gameState = "intro";
 			setup();
 		}
