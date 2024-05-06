@@ -44,8 +44,10 @@ let my, guests;
 // graphic layer for window game
 let gWindow;
 
-// graphic layer for plant game
-let gPlant;
+// graphic layers for plant game
+let gPlantDirt;
+let gHealthyLeaves;
+let gDeadLeaves;
 
 // pixels cleaned in window game
 let cleanPixels;
@@ -72,6 +74,7 @@ function preload() {
 	soapShared = partyLoadShared("soap", { locations: [] });
 	wipeShared = partyLoadShared("wipe", { locations: [] });
 	waterShared = partyLoadShared("water", { locations: [] });
+	trimShared = partyLoadShared("trim", { locations: [] });
 
 	// loading all images
 	images.titleScreen = loadImage("./assets/images/title.gif");
@@ -106,12 +109,30 @@ function setup() {
 	gWindow.ellipse(350, 470, 480, 240);
 	gWindow.ellipse(500, 490, 400, 230);
 
-	// graphics buffer for plant dirt and bark
-	gPlant = createGraphics(800, 800);
-	gPlant.fill("#9e5c21");
-	gPlant.noStroke();
-	gPlant.rect(350, 500, 160, 85, 24);
-	gPlant.rect(365, 410, 80, 100, 18);
+	// graphics buffer for plant dirt
+	gPlantDirt = createGraphics(800, 800);
+	gPlantDirt.fill("#9e5c21");
+	gPlantDirt.noStroke();
+	gPlantDirt.rect(350, 480, 160, 95, 24);
+	gPlantDirt.fill("#f2f2f2");
+	gPlantDirt.rect(375, 300, 80, 240, 18);
+
+	// graphics buffers for plant leaves
+	// healthy
+	gHealthyLeaves = createGraphics(800, 800);
+	gHealthyLeaves.noStroke();
+	gHealthyLeaves.fill("#3e913c");
+	gHealthyLeaves.rect(230, 170, 110, 140, 20);
+	gHealthyLeaves.rect(300, 220, 100, 100, 20);
+	gHealthyLeaves.rect(500, 110, 110, 130, 30);
+	gHealthyLeaves.rect(425, 130, 105, 130, 35);
+	// dead
+	gDeadLeaves = createGraphics (800, 800);
+	gDeadLeaves.noStroke();
+	gDeadLeaves.fill("#939662");
+	gDeadLeaves.rect(430, 320, 120, 70, 40);
+	gDeadLeaves.rect(288, 400, 120, 60, 30);
+
 
 	// initializing rects on table and cupboard respectively
 	if (partyIsHost()) {
@@ -195,7 +216,7 @@ function draw() {
 	}
 
 	// checks for end game by checking each mini game task
-	if (shared.tableTask && shared.windowTask && shared.plantTask) {
+	if (shared.tableTask && shared.windowTask && shared.plantTask && shared.cupboardTask) {
 		shared.gameState = "end";
 	}
 
@@ -414,15 +435,30 @@ function drawPlantGame() {
 	textSize(30);
 	textAlign(LEFT);
 	text("Roommate 1: click to water the plant", 185, 45);
-	text("Roommate 2: click to prune branches", 185, 75);
+	text("Roommate 2: click to trim dead leaves", 185, 75);
 	pop();
 
 	// dirt
-	image(gPlant, 0, 0);
+	image(gPlantDirt, 0, 0);
+
+	// healthy leaves
+	image(gHealthyLeaves, 0, 0);
 
 	// plant
 	images.plantZoom.resize(450, 670);
 	image(images.plantZoom, 200, 90);
+
+	// dead leaves
+	image(gDeadLeaves, 0, 0);
+
+	// trim with erase
+	gDeadLeaves.push();
+	gDeadLeaves.erase();
+	for (const location of trimShared.locations) {
+		gDeadLeaves.ellipse(location.x, location.y, 80, 80);
+	}
+	gDeadLeaves.noErase();
+	gDeadLeaves.pop();
 
 	// watering function
 	for (const location of waterShared.locations) {
@@ -734,8 +770,8 @@ function drawWindowGame() {
 	gWindow.updatePixels();
 
 	// window
-	images.windowZoom.resize(700, 500);
-	image(images.windowZoom, 50, 150);
+	images.windowZoom.resize(670, 550);
+	image(images.windowZoom, 70, 150);
 
 	// "dirt" to clean on window
 	image(gWindow, 0, 0);
@@ -778,10 +814,13 @@ function mouseClicked() {
 	if (shared.gameState === "plant-game") {
 		if (partyIsHost()) {
 			waterShared.locations.push({ x: mouseX, y: mouseY });
-			if (waterShared.locations.length >= 15) {
-				shared.plantTask = true;
-				shared.gameState = "main";
-			}
+		} else { 
+			trimShared.locations.push({ x: mouseX, y: mouseY });
+		}
+		// check if both tasks complete
+		if (waterShared.locations.length >= 15 && trimShared.locations.length >= 5) {
+			shared.plantTask = true;
+			shared.gameState = "main";
 		}
 	}
 }
