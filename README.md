@@ -14,6 +14,8 @@ You and your roommate are given a list of tasks to work together to complete. Us
 
 <img src="./src/assets/images/title.gif" alt="title screen gif" width="300" /> <img src="./src/assets/images/room.jpg" alt="room background image" width="300" />
 
+<img src="./src/assets/images/roomScreenshot.png" alt="screenshot of the room with some items checked off" width="300" /> <img src="./src/assets/images/plantScreenshot.png" alt="plant game screenshot" width="300" />
+
 ## External Assets
 
 ## Font
