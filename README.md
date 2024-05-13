@@ -4,13 +4,11 @@ Welcome to Home Sweet Home!
 
 Home Sweet Home is a 2-player cooperative game made using the [p5party↗](https://p5party.org/) library.
 
-<br>
 
 ## Instructions
 You and your roommate are given a list of tasks to work together to complete. Use your mouse to wipe the windows, clean the table, care for the plant, and sort the cupboard to check things off the list together and get the place looking brand new!
 
 ### [Play here↗](https://rogec540.github.io/GameB/src/index.html)
-<br>
 
 ## Visuals
 
@@ -32,6 +30,5 @@ You and your roommate are given a list of tasks to work together to complete. Us
 **Emma Wu** Available on Github @ [ewwamu↗](https://github.com/ewwamu)\
 **Sophie Jiang**
 
-<br>
 
 [^1]: _Made for Spring 2024 Collab: P5 Party by Charlotte Rogers, Chloe Yiu, Sophie Jiang, and Emma Wu_
