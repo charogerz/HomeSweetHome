@@ -8,7 +8,7 @@ Home Sweet Home is a 2-player cooperative game made using the [p5party↗](https
 ## Instructions
 You and your roommate are given a list of tasks to work together to complete. Use your mouse to wipe the windows, clean the table, care for the plant, and sort the cupboard to check things off the list together and get the place looking brand new!
 
-### [Play here↗](https://rogec540.github.io/GameB/src/index.html)
+### [Play here↗](https://charogerz.github.io/HomeSweetHome/src/index.html)
 
 ## Visuals
 
